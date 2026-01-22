@@ -1,0 +1,258 @@
+nohup: ignoring input
+🚀 LAUNCHING COMPLETE HIGH-VOLUME PIPELINE
+================================================
+Starting at: Thu Jan 22 03:24:44 PM MST 2026
+
+📊 [1/7] Multi-Site Job Scraper (LinkedIn + Indeed + ZipRecruiter + Glassdoor)
+INFO:__main__:🚀 Launching High-Volume Multi-Site Scraper
+INFO:__main__:📊 Configuration: 14 queries × 4 sites × 100 results/query
+INFO:__main__:📈 Expected jobs: ~1400
+INFO:__main__:🔍 Scraping: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer' across 4 sites...
+ERROR:__main__:Error scraping '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer': 'ZIPRECRUITER'
+INFO:__main__:🔍 Scraping: '"VP" OR "Head of" Medicaid Medicare "health plan"' across 4 sites...
+ERROR:__main__:Error scraping '"VP" OR "Head of" Medicaid Medicare "health plan"': 'ZIPRECRUITER'
+INFO:__main__:🔍 Scraping: '"Enterprise Account Executive" payer "health plan"' across 4 sites...
+INFO:__main__:🔍 Scraping: '"Strategic Account Executive" Medicaid "Medicare Advantage"' across 4 sites...
+ERROR:__main__:Error scraping '"Enterprise Account Executive" payer "health plan"': 'ZIPRECRUITER'
+ERROR:__main__:Error scraping '"Strategic Account Executive" Medicaid "Medicare Advantage"': 'ZIPRECRUITER'
+INFO:__main__:🔍 Scraping: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"' across 4 sites...
+ERROR:__main__:Error scraping '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"': 'ZIPRECRUITER'
+INFO:__main__:🔍 Scraping: '"Enterprise Account Executive" OR "Strategic Account Executive"' across 4 sites...
+INFO:__main__:🔍 Scraping: '"VP Sales" fintech payments B2B' across 4 sites...
+INFO:__main__:🔍 Scraping: '"VP Sales" Denver Colorado' across 4 sites...
+INFO:__main__:🔍 Scraping: '"Head of Growth" healthcare sales' across 4 sites...
+ERROR:__main__:Error scraping '"Enterprise Account Executive" OR "Strategic Account Executive"': 'ZIPRECRUITER'
+ERROR:__main__:Error scraping '"VP Sales" fintech payments B2B': 'ZIPRECRUITER'
+ERROR:__main__:Error scraping '"VP Sales" Denver Colorado': 'ZIPRECRUITER'
+ERROR:__main__:Error scraping '"Head of Growth" healthcare sales': 'ZIPRECRUITER'
+INFO:__main__:🔍 Scraping: 'enterprise sales healthcare' across 4 sites...
+INFO:__main__:🔍 Scraping: 'senior account executive remote healthcare' across 4 sites...
+INFO:__main__:🔍 Scraping: 'director sales health technology' across 4 sites...
+INFO:__main__:🔍 Scraping: 'payer sales' across 4 sites...
+ERROR:__main__:Error scraping 'enterprise sales healthcare': 'ZIPRECRUITER'
+ERROR:__main__:Error scraping 'senior account executive remote healthcare': 'ZIPRECRUITER'
+ERROR:__main__:Error scraping 'director sales health technology': 'ZIPRECRUITER'
+ERROR:__main__:Error scraping 'payer sales': 'ZIPRECRUITER'
+INFO:__main__:🔍 Scraping: 'managed care sales' across 4 sites...
+ERROR:__main__:Error scraping 'managed care sales': 'ZIPRECRUITER'
+INFO:__main__:🎯 Total jobs scraped: 0
+INFO:__main__:💾 Stored 0 new jobs, skipped 0 duplicates
+INFO:__main__:✅ Multi-Site Scrape Complete: 0 new jobs added to database
+
+🤖 [2/7] Batch LLM Scoring with MiniMax
+INFO:__main__:📊 Batch scoring 19 jobs with MiniMax...
+INFO:__main__:Processing batch 1/1
+ERROR:__main__:MiniMax batch scoring failed: 'NoneType' object is not subscriptable
+WARNING:__main__:Batch 1 failed, skipping
+INFO:__main__:✅ Batch scoring complete: 0 jobs scored
+
+🎯 [3/7] Direct ATS Scraper (Greenhouse + Lever)
+INFO:__main__:🎯 Launching Direct ATS Scraper
+INFO:__main__:📊 Targets: 21 companies
+INFO:__main__:✅ collectivehealth: Found 0 jobs
+INFO:__main__:✅ komodohealth: Found 0 jobs
+INFO:__main__:✅ healthverity: Found 0 jobs
+INFO:__main__:✅ gravie: Found 19 jobs (Lever)
+INFO:__main__:📊 Total scraped: 0 Greenhouse + 19 Lever jobs
+INFO:__main__:💾 Stored 0 greenhouse jobs
+INFO:__main__:💾 Stored 1 lever jobs
+INFO:__main__:✅ ATS Scrape Complete: 1 new jobs from career pages
+
+🌟 [4/7] Startup Directory (YC + Wellfound)
+INFO:__main__:🚀 Launching Startup Universe Discovery
+INFO:__main__:Scraping Y Combinator healthcare directory...
+INFO:__main__:✅ YC: Found 0 healthcare companies
+INFO:__main__:Scraping Wellfound healthcare startups...
+INFO:__main__:📊 Total discovered: 0 startups
+INFO:__main__:💾 Stored 0 startups in universe
+INFO:__main__:✅ Startup Discovery Complete: 0 new companies added to universe
+
+💰 [5/7] Rock Health Funding Database
+INFO:__main__:💰 Launching Rock Health Funding Database Scraper
+ERROR:__main__:Rock Health request failed: 404
+WARNING:__main__:No companies found from Rock Health
+
+🏥 [6/7] Healthcare-Specific Job Boards (MedReps, HealthcareJobSite, Health eCareers)
+INFO:__main__:🏥 Launching Healthcare-Specific Job Board Scraper
+INFO:__main__:Scraping MedReps...
+INFO:__main__:Scraping HealthcareJobSite...
+INFO:__main__:✅ HealthcareJobSite: Found 0 jobs
+INFO:__main__:Scraping Health eCareers...
+INFO:__main__:✅ Health eCareers: Found 0 jobs
+INFO:__main__:📊 Total scraped: 0 jobs from niche boards
+INFO:__main__:💾 Stored 0 niche healthcare jobs
+INFO:__main__:✅ Niche Boards Complete: 0 new healthcare sales jobs
+
+📰 [7/7] RSS Funding News Aggregator (TechCrunch, Fierce Healthcare, etc.)
+INFO:__main__:📰 Launching RSS Funding News Aggregator
+INFO:__main__:📡 Fetching techcrunch_healthcare...
+INFO:__main__:✅ techcrunch_healthcare: Found 0 funding signals
+INFO:__main__:📡 Fetching techcrunch_funding...
+INFO:__main__:✅ techcrunch_funding: Found 1 funding signals
+INFO:__main__:📡 Fetching fierce_healthcare...
+INFO:__main__:✅ fierce_healthcare: Found 3 funding signals
+INFO:__main__:📡 Fetching healthcare_finance...
+INFO:__main__:✅ healthcare_finance: Found 0 funding signals
+INFO:__main__:📡 Fetching mobihealthnews...
+INFO:__main__:✅ mobihealthnews: Found 2 funding signals
+INFO:__main__:📊 Total signals found: 6
+Traceback (most recent call last):
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1811, in _execute_context
+    context = constructor(
+        dialect, self, conn, execution_options, *args, **kw
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1485, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 2792, in process
+    return json_serializer(value)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type datetime is not JSON serializable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bent-christiansen/.gemini/antigravity/scratch/job_search_automation/scraper_rss_funding.py", line 178, in <module>
+    run_rss_aggregator()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/bent-christiansen/.gemini/antigravity/scratch/job_search_automation/scraper_rss_funding.py", line 172, in run_rss_aggregator
+    companies_created, signals_created = store_funding_signals(all_signals)
+                                         ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bent-christiansen/.gemini/antigravity/scratch/job_search_automation/scraper_rss_funding.py", line 153, in store_funding_signals
+    db.commit()
+    ~~~~~~~~~^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2032, in commit
+    trans.commit(_to_root=True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<string>", line 2, in commit
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1313, in commit
+    self._prepare_impl()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "<string>", line 2, in _prepare_impl
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1288, in _prepare_impl
+    self.session.flush()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4345, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4480, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4441, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py", line 466, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        insert,
+        ^^^^^^^
+    )
+    ^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1143, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1415, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1637, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str(statement), parameters, None, None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2351, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1811, in _execute_context
+    context = constructor(
+        dialect, self, conn, execution_options, *args, **kw
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1485, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 2792, in process
+    return json_serializer(value)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+sqlalchemy.exc.StatementError: (builtins.TypeError) Object of type datetime is not JSON serializable
+[SQL: INSERT INTO companies (id, name, domain, vertical, stage, funding_total, employee_count, hq_location, is_bootstrapped, profitability_signal, linkedin_url, crunchbase_url, fit_score, monitoring_status, last_signal_date, signal_score_30d, raw_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING created_at, updated_at, id]
+[parameters: [{'name': 'Zipline charts drone delivery expansion with $600M in new funding', 'id': '2f414806-da79-47c3-99e9-c2a3011699ed', 'fit_score': 85, 'raw_data ... (517 characters truncated) ... : None, 'domain': None, 'profitability_signal': None, 'last_signal_date': None, 'crunchbase_url': None, 'hq_location': None, 'signal_score_30d': None}, {'name': '<a href="https', 'id': '5d60f099-0604-4f1f-8b1e-36cb2bd259b4', 'fit_score': 85, 'raw_data': {'company_name': '<a href="https', 'funding': No ... (629 characters truncated) ... : None, 'domain': None, 'profitability_signal': None, 'last_signal_date': None, 'crunchbase_url': None, 'hq_location': None, 'signal_score_30d': None}, {'name': '<a href="https', 'id': '270bcd09-0785-4272-89f5-bd13360a099e', 'fit_score': 85, 'raw_data': {'company_name': '<a href="https', 'funding': '$ ... (627 characters truncated) ... : None, 'domain': None, 'profitability_signal': None, 'last_signal_date': None, 'crunchbase_url': None, 'hq_location': None, 'signal_score_30d': None}, {'name': '<a href="https', 'id': '15f2b453-39a3-4a7d-a7f6-4a9d3e339f2e', 'fit_score': 85, 'raw_data': {'company_name': '<a href="https', 'funding': No ... (563 characters truncated) ... : None, 'domain': None, 'profitability_signal': None, 'last_signal_date': None, 'crunchbase_url': None, 'hq_location': None, 'signal_score_30d': None}, {'name': 'OpenEvidence scores $250M', 'id': 'f9c92fe9-ea7f-4ca2-b5f4-3d5937433dd7', 'fit_score': 85, 'raw_data': {'company_name': 'OpenEvidence scores ... (402 characters truncated) ... : None, 'domain': None, 'profitability_signal': None, 'last_signal_date': None, 'crunchbase_url': None, 'hq_location': None, 'signal_score_30d': None}, {'name': 'Gates Foundation', 'id': '975171ae-3596-41a3-b055-ee120ce3f91f', 'fit_score': 85, 'raw_data': {'company_name': 'Gates Foundation', 'funding' ... (415 characters truncated) ... : None, 'domain': None, 'profitability_signal': None, 'last_signal_date': None, 'crunchbase_url': None, 'hq_location': None, 'signal_score_30d': None}]]
+
+✅ COMPLETE PIPELINE FINISHED
+================================================
+Completed at: Thu Jan 22 03:25:05 PM MST 2026
+
+📈 FINAL DATABASE SNAPSHOT:
+================================================
+Total Jobs:|361
+New/Unscored:|20
+Shortlisted:|9
+Active Companies:|25
+Funding Signals:|0
+
+📊 JOB SOURCES BREAKDOWN:
+indeed|186
+linkedin|156
+lever|19
+
+🔄 Restarting Streamlit Dashboard...
+
+✅ Dashboard live at http://localhost:8501
+================================================

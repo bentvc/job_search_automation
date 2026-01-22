@@ -1,0 +1,14 @@
+python-jobspy
+psycopg2-binary
+requests
+beautifulsoup4
+playwright
+openai
+anthropic
+google-generativeai
+streamlit
+apscheduler
+python-dotenv
+sqlalchemy
+pydantic
+pandas

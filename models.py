@@ -1,0 +1,163 @@
+from sqlalchemy import Column, String, Integer, Boolean, Numeric, DateTime, ForeignKey, Enum, JSON, Text
+from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.sql import func
+import uuid
+
+Base = declarative_base()
+
+class Company(Base):
+    __tablename__ = 'companies'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    name = Column(String(255), unique=True)
+    domain = Column(String(255), nullable=True)
+    vertical = Column(String(100)) # e.g. 'healthcare', 'fintech', 'denver_saas'
+    stage = Column(String(100))
+    funding_total = Column(Numeric)
+    employee_count = Column(Integer)
+    hq_location = Column(String(255))
+    is_bootstrapped = Column(Boolean, default=False)
+    profitability_signal = Column(Text)
+    linkedin_url = Column(String(500))
+    crunchbase_url = Column(String(500))
+    fit_score = Column(Integer)
+    monitoring_status = Column(Enum('active', 'archived', 'low_priority', name='monitoring_status'), default='active')
+    last_signal_date = Column(DateTime)
+    signal_score_30d = Column(Integer)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    raw_data = Column(JSON)
+    
+    signals = relationship("CompanySignal", back_populates="company")
+    jobs = relationship("Job", back_populates="company")
+    contacts = relationship("Contact", back_populates="company")
+    applications = relationship("Application", back_populates="company")
+
+class CompanySignal(Base):
+    __tablename__ = 'company_signals'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_id = Column(String(36), ForeignKey('companies.id'))
+    signal_type = Column(String(100)) # e.g. 'funding', 'hiring', 'expansion'
+    signal_date = Column(DateTime)
+    signal_text = Column(Text)
+    score = Column(Integer)
+    source_url = Column(String(500))
+    created_at = Column(DateTime, server_default=func.now())
+    
+    company = relationship("Company", back_populates="signals")
+
+class Job(Base):
+    __tablename__ = 'jobs'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_id = Column(String(36), ForeignKey('companies.id'), nullable=True)
+    source = Column(String(100))
+    title = Column(String(500))
+    company_name = Column(String(255))
+    location = Column(String(255))
+    is_remote = Column(Boolean)
+    is_local = Column(Boolean)
+    url = Column(String(1000))
+    date_posted = Column(DateTime)
+    description = Column(Text)
+    raw_data = Column(JSON)
+    dedupe_key = Column(String(255), unique=True)
+    status = Column(Enum('new', 'scored', 'shortlisted', 'applied', 'interview', 'rejected', 'archived', name='job_status'), default='new')
+    vertical = Column(String(100))
+    vertical_score_boost = Column(Integer, default=0)
+    application_method = Column(String(100))
+    form_complexity = Column(String(100))
+    local_bonus_applied = Column(Integer)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    source_urls = Column(JSON)
+    
+    company = relationship("Company", back_populates="jobs")
+    scores = relationship("JobScore", back_populates="job")
+
+class JobScore(Base):
+    __tablename__ = 'job_scores'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    job_id = Column(String(36), ForeignKey('jobs.id'))
+    overall_score = Column(Integer)
+    seniority_score = Column(Integer)
+    healthcare_score = Column(Integer)
+    payer_score = Column(Integer)
+    saas_score = Column(Integer)
+    deal_size_alignment = Column(Integer)
+    notes = Column(Text)
+    created_at = Column(DateTime, server_default=func.now())
+    
+    job = relationship("Job", back_populates="scores")
+
+class Contact(Base):
+    __tablename__ = 'contacts'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_id = Column(String(36), ForeignKey('companies.id'))
+    name = Column(String(255))
+    title = Column(String(255))
+    email = Column(String(255))
+    linkedin_url = Column(String(500))
+    role_type = Column(String(100)) # e.g. 'hiring_manager', 'executive'
+    apollo_id = Column(String(100))
+    confidence_score = Column(Integer)
+    
+    # Sequence Tracking
+    status = Column(String(50), default='new') # new, lead, emailed, no_response, replied, meeting, closed
+    followup_stage = Column(Integer, default=0) # 0: intro, 1: followup1, 2: followup2
+    last_contacted_at = Column(DateTime)
+    next_followup_due = Column(DateTime)
+    
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    company = relationship("Company", back_populates="contacts")
+
+class Application(Base):
+    __tablename__ = 'applications'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    job_id = Column(String(36), ForeignKey('jobs.id'), nullable=True)
+    company_id = Column(String(36), ForeignKey('companies.id'))
+    contact_id = Column(String(36), ForeignKey('contacts.id'), nullable=True)
+    application_type = Column(String(100))
+    resume_version = Column(String(255))
+    cover_note = Column(Text)
+    outreach_email_sent = Column(Boolean, default=False)
+    outreach_email_body = Column(Text)
+    application_method = Column(String(100))
+    ats_submitted = Column(Boolean, default=False)
+    submitted_at = Column(DateTime)
+    status = Column(String(100))
+    response_date = Column(DateTime)
+    notes = Column(Text)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    company = relationship("Company", back_populates="applications")
+
+class ProactiveOutreach(Base):
+    __tablename__ = 'proactive_outreach'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_id = Column(String(36), ForeignKey('companies.id'))
+    contact_id = Column(String(36), ForeignKey('contacts.id'))
+    job_id = Column(String(36), ForeignKey('jobs.id'), nullable=True)  # Link to job if job-based outreach
+    outreach_type = Column(String(50), default='job_intro')  # job_intro, signal_intro, followup_1, followup_2
+    signal_summary = Column(Text)
+    fit_explanation = Column(Text)
+    draft_email = Column(Text)
+    priority_score = Column(Integer)
+    fit_score = Column(Integer, default=0)  # Copied from job/company for queue ordering
+    status = Column(String(100), default='queued')  # queued, snoozed, sent, replied, dismissed
+    sent_at = Column(DateTime)
+    next_action_at = Column(DateTime, nullable=True)  # When this item becomes actionable
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    company = relationship("Company", foreign_keys=[company_id])
+    contact = relationship("Contact", foreign_keys=[contact_id])
+    job = relationship("Job", foreign_keys=[job_id])

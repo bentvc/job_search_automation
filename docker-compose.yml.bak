@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  ui:
+    build: .
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    command: streamlit run ui_streamlit.py
+
+  scheduler:
+    build: .
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    env_file:
+      - .env
+    command: python scheduler.py
+
+  scraper:
+    build: .
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    env_file:
+      - .env
+    command: python agent1_job_scraper.py

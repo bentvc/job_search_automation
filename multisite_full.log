@@ -1,0 +1,295 @@
+INFO:__main__:🚀 Launching High-Volume Multi-Site Scraper (FIXED)
+INFO:__main__:📊 Config: 14 queries × 4 sites
+INFO:__main__:🌐 Sites: linkedin, indeed, ziprecruiter, glassdoor
+INFO:__main__:
+[Query 1/14]: "VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer
+INFO:__main__:🔍 linkedin: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer'...
+2026-01-22 15:39:26,822 - INFO - JobSpy:Linkedin - finished scraping
+INFO:__main__:✅ linkedin: Found 100 jobs for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer'
+INFO:__main__:🔍 indeed: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer'...
+INFO:__main__:✅ indeed: Found 1 jobs for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer'
+INFO:__main__:🔍 ziprecruiter: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer'...
+ERROR:__main__:❌ ziprecruiter error for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer'...
+INFO:__main__:✅ glassdoor: Found 1 jobs for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO" healthtech payer'
+INFO:__main__:  Subtotal: 102 jobs from this query
+INFO:__main__:
+[Query 2/14]: "VP" OR "Head of" Medicaid Medicare "health plan"
+INFO:__main__:🔍 linkedin: '"VP" OR "Head of" Medicaid Medicare "health plan"'...
+INFO:__main__:✅ linkedin: Found 100 jobs for '"VP" OR "Head of" Medicaid Medicare "health plan"'
+INFO:__main__:🔍 indeed: '"VP" OR "Head of" Medicaid Medicare "health plan"'...
+INFO:__main__:✅ indeed: Found 19 jobs for '"VP" OR "Head of" Medicaid Medicare "health plan"'
+INFO:__main__:🔍 ziprecruiter: '"VP" OR "Head of" Medicaid Medicare "health plan"'...
+ERROR:__main__:❌ ziprecruiter error for '"VP" OR "Head of" Medicaid Medicare "health plan"': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"VP" OR "Head of" Medicaid Medicare "health plan"'...
+INFO:__main__:✅ glassdoor: Found 51 jobs for '"VP" OR "Head of" Medicaid Medicare "health plan"'
+INFO:__main__:  Subtotal: 170 jobs from this query
+INFO:__main__:
+[Query 3/14]: "Enterprise Account Executive" payer "health plan"
+INFO:__main__:🔍 linkedin: '"Enterprise Account Executive" payer "health plan"'...
+INFO:__main__:✅ linkedin: Found 1 jobs for '"Enterprise Account Executive" payer "health plan"'
+INFO:__main__:🔍 indeed: '"Enterprise Account Executive" payer "health plan"'...
+INFO:__main__:🔍 ziprecruiter: '"Enterprise Account Executive" payer "health plan"'...
+ERROR:__main__:❌ ziprecruiter error for '"Enterprise Account Executive" payer "health plan"': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"Enterprise Account Executive" payer "health plan"'...
+INFO:__main__:✅ glassdoor: Found 1 jobs for '"Enterprise Account Executive" payer "health plan"'
+INFO:__main__:  Subtotal: 2 jobs from this query
+INFO:__main__:
+[Query 4/14]: "Strategic Account Executive" Medicaid "Medicare Advantage"
+INFO:__main__:🔍 linkedin: '"Strategic Account Executive" Medicaid "Medicare Advantage"'...
+INFO:__main__:✅ linkedin: Found 1 jobs for '"Strategic Account Executive" Medicaid "Medicare Advantage"'
+INFO:__main__:🔍 indeed: '"Strategic Account Executive" Medicaid "Medicare Advantage"'...
+INFO:__main__:🔍 ziprecruiter: '"Strategic Account Executive" Medicaid "Medicare Advantage"'...
+ERROR:__main__:❌ ziprecruiter error for '"Strategic Account Executive" Medicaid "Medicare Advantage"': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"Strategic Account Executive" Medicaid "Medicare Advantage"'...
+INFO:__main__:  Subtotal: 1 jobs from this query
+INFO:__main__:
+[Query 5/14]: "VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"
+INFO:__main__:🔍 linkedin: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'...
+WARNING:__main__:⚠️ linkedin blocked/rate-limited for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'
+INFO:__main__:Retrying linkedin in 5 seconds...
+INFO:__main__:🔍 linkedin: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'...
+INFO:__main__:✅ linkedin: Found 100 jobs for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'
+INFO:__main__:🔍 indeed: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'...
+INFO:__main__:✅ indeed: Found 65 jobs for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'
+INFO:__main__:🔍 ziprecruiter: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'...
+ERROR:__main__:❌ ziprecruiter error for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'...
+INFO:__main__:✅ glassdoor: Found 100 jobs for '"VP Sales" OR "SVP Sales" OR "Head of Sales" OR "CRO"'
+INFO:__main__:  Subtotal: 265 jobs from this query
+INFO:__main__:
+[Query 6/14]: "Enterprise Account Executive" OR "Strategic Account Executive"
+INFO:__main__:🔍 linkedin: '"Enterprise Account Executive" OR "Strategic Account Executive"'...
+INFO:__main__:✅ linkedin: Found 100 jobs for '"Enterprise Account Executive" OR "Strategic Account Executive"'
+INFO:__main__:🔍 indeed: '"Enterprise Account Executive" OR "Strategic Account Executive"'...
+INFO:__main__:✅ indeed: Found 26 jobs for '"Enterprise Account Executive" OR "Strategic Account Executive"'
+INFO:__main__:🔍 ziprecruiter: '"Enterprise Account Executive" OR "Strategic Account Executive"'...
+ERROR:__main__:❌ ziprecruiter error for '"Enterprise Account Executive" OR "Strategic Account Executive"': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"Enterprise Account Executive" OR "Strategic Account Executive"'...
+INFO:__main__:✅ glassdoor: Found 57 jobs for '"Enterprise Account Executive" OR "Strategic Account Executive"'
+INFO:__main__:  Subtotal: 183 jobs from this query
+INFO:__main__:
+[Query 7/14]: "VP Sales" fintech payments B2B
+INFO:__main__:🔍 linkedin: '"VP Sales" fintech payments B2B'...
+INFO:__main__:🔍 indeed: '"VP Sales" fintech payments B2B'...
+INFO:__main__:🔍 ziprecruiter: '"VP Sales" fintech payments B2B'...
+ERROR:__main__:❌ ziprecruiter error for '"VP Sales" fintech payments B2B': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"VP Sales" fintech payments B2B'...
+INFO:__main__:  Subtotal: 0 jobs from this query
+INFO:__main__:
+[Query 8/14]: "VP Sales" Denver Colorado
+INFO:__main__:🔍 linkedin: '"VP Sales" Denver Colorado'...
+INFO:__main__:✅ linkedin: Found 5 jobs for '"VP Sales" Denver Colorado'
+INFO:__main__:🔍 indeed: '"VP Sales" Denver Colorado'...
+INFO:__main__:🔍 ziprecruiter: '"VP Sales" Denver Colorado'...
+ERROR:__main__:❌ ziprecruiter error for '"VP Sales" Denver Colorado': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"VP Sales" Denver Colorado'...
+INFO:__main__:  Subtotal: 5 jobs from this query
+INFO:__main__:
+[Query 9/14]: "Head of Growth" healthcare sales
+INFO:__main__:🔍 linkedin: '"Head of Growth" healthcare sales'...
+INFO:__main__:✅ linkedin: Found 11 jobs for '"Head of Growth" healthcare sales'
+INFO:__main__:🔍 indeed: '"Head of Growth" healthcare sales'...
+INFO:__main__:✅ indeed: Found 1 jobs for '"Head of Growth" healthcare sales'
+INFO:__main__:🔍 ziprecruiter: '"Head of Growth" healthcare sales'...
+ERROR:__main__:❌ ziprecruiter error for '"Head of Growth" healthcare sales': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: '"Head of Growth" healthcare sales'...
+INFO:__main__:✅ glassdoor: Found 1 jobs for '"Head of Growth" healthcare sales'
+INFO:__main__:  Subtotal: 13 jobs from this query
+INFO:__main__:
+[Query 10/14]: enterprise sales healthcare
+INFO:__main__:🔍 linkedin: 'enterprise sales healthcare'...
+INFO:__main__:✅ linkedin: Found 100 jobs for 'enterprise sales healthcare'
+INFO:__main__:🔍 indeed: 'enterprise sales healthcare'...
+INFO:__main__:✅ indeed: Found 94 jobs for 'enterprise sales healthcare'
+INFO:__main__:🔍 ziprecruiter: 'enterprise sales healthcare'...
+ERROR:__main__:❌ ziprecruiter error for 'enterprise sales healthcare': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: 'enterprise sales healthcare'...
+INFO:__main__:✅ glassdoor: Found 7 jobs for 'enterprise sales healthcare'
+INFO:__main__:  Subtotal: 201 jobs from this query
+INFO:__main__:
+[Query 11/14]: senior account executive remote healthcare
+INFO:__main__:🔍 linkedin: 'senior account executive remote healthcare'...
+INFO:__main__:✅ linkedin: Found 100 jobs for 'senior account executive remote healthcare'
+INFO:__main__:🔍 indeed: 'senior account executive remote healthcare'...
+INFO:__main__:✅ indeed: Found 53 jobs for 'senior account executive remote healthcare'
+INFO:__main__:🔍 ziprecruiter: 'senior account executive remote healthcare'...
+ERROR:__main__:❌ ziprecruiter error for 'senior account executive remote healthcare': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: 'senior account executive remote healthcare'...
+INFO:__main__:✅ glassdoor: Found 81 jobs for 'senior account executive remote healthcare'
+INFO:__main__:  Subtotal: 234 jobs from this query
+INFO:__main__:
+[Query 12/14]: director sales health technology
+INFO:__main__:🔍 linkedin: 'director sales health technology'...
+INFO:__main__:✅ linkedin: Found 74 jobs for 'director sales health technology'
+INFO:__main__:🔍 indeed: 'director sales health technology'...
+INFO:__main__:✅ indeed: Found 100 jobs for 'director sales health technology'
+INFO:__main__:🔍 ziprecruiter: 'director sales health technology'...
+ERROR:__main__:❌ ziprecruiter error for 'director sales health technology': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: 'director sales health technology'...
+INFO:__main__:✅ glassdoor: Found 100 jobs for 'director sales health technology'
+INFO:__main__:  Subtotal: 274 jobs from this query
+INFO:__main__:
+[Query 13/14]: payer sales
+INFO:__main__:🔍 linkedin: 'payer sales'...
+INFO:__main__:✅ linkedin: Found 93 jobs for 'payer sales'
+INFO:__main__:🔍 indeed: 'payer sales'...
+INFO:__main__:✅ indeed: Found 40 jobs for 'payer sales'
+INFO:__main__:🔍 ziprecruiter: 'payer sales'...
+ERROR:__main__:❌ ziprecruiter error for 'payer sales': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: 'payer sales'...
+INFO:__main__:✅ glassdoor: Found 68 jobs for 'payer sales'
+INFO:__main__:  Subtotal: 201 jobs from this query
+INFO:__main__:
+[Query 14/14]: managed care sales
+INFO:__main__:🔍 linkedin: 'managed care sales'...
+WARNING:__main__:⚠️ linkedin blocked/rate-limited for 'managed care sales'
+INFO:__main__:Retrying linkedin in 5 seconds...
+INFO:__main__:🔍 linkedin: 'managed care sales'...
+WARNING:__main__:⚠️ linkedin blocked/rate-limited for 'managed care sales'
+INFO:__main__:🔍 indeed: 'managed care sales'...
+INFO:__main__:✅ indeed: Found 40 jobs for 'managed care sales'
+INFO:__main__:🔍 ziprecruiter: 'managed care sales'...
+ERROR:__main__:❌ ziprecruiter error for 'managed care sales': 'ZIPRECRUITER'
+INFO:__main__:🔍 glassdoor: 'managed care sales'...
+INFO:__main__:✅ glassdoor: Found 85 jobs for 'managed care sales'
+INFO:__main__:  Subtotal: 125 jobs from this query
+INFO:__main__:
+🎯 Total jobs scraped: 1776
+Traceback (most recent call last):
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1811, in _execute_context
+    context = constructor(
+        dialect, self, conn, execution_options, *args, **kw
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1485, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 2792, in process
+    return json_serializer(value)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type date is not JSON serializable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bent-christiansen/.gemini/antigravity/scratch/job_search_automation/scraper_multisite.py", line 140, in <module>
+    run_multisite_scraper()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/bent-christiansen/.gemini/antigravity/scratch/job_search_automation/scraper_multisite.py", line 134, in run_multisite_scraper
+    stored = deduplicate_and_store(all_jobs)
+  File "/home/bent-christiansen/.gemini/antigravity/scratch/job_search_automation/scraper_multisite.py", line 106, in deduplicate_and_store
+    db.commit()
+    ~~~~~~~~~^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2032, in commit
+    trans.commit(_to_root=True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<string>", line 2, in commit
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1313, in commit
+    self._prepare_impl()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "<string>", line 2, in _prepare_impl
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1288, in _prepare_impl
+    self.session.flush()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4345, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4480, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4441, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py", line 466, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        insert,
+        ^^^^^^^
+    )
+    ^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1143, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1415, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1637, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1817, in _execute_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str(statement), parameters, None, None
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2351, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1811, in _execute_context
+    context = constructor(
+        dialect, self, conn, execution_options, *args, **kw
+    )
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 1485, in _init_compiled
+    flattened_processors[key](compiled_params[key])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/site-packages/sqlalchemy/sql/sqltypes.py", line 2792, in process
+    return json_serializer(value)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "/home/bent-christiansen/miniconda3/lib/python3.13/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+sqlalchemy.exc.StatementError: (builtins.TypeError) Object of type date is not JSON serializable
+[SQL: INSERT INTO jobs (id, company_id, source, title, company_name, location, is_remote, is_local, url, date_posted, description, raw_data, dedupe_key, status, vertical, vertical_score_boost, application_method, form_complexity, local_bonus_applied) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING created_at, updated_at, id]
+[parameters: [{'source': 'linkedin', 'location': 'Newark, NJ', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 618902), 'i ... (1224 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Portland, OR', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 619179),  ... (1228 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Camden, NJ', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 619347), 'i ... (1224 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Kansas City, MO', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 619506 ... (1234 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Buffalo, NY', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 619665), ' ... (1226 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Uniontown, PA', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 619819), ... (1230 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Nashville, TN', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 619960), ... (1230 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Charlotte, NC', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 620095), ... (1230 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Round Rock, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 620230) ... (1232 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Dallas, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 620357), 'i ... (1224 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Irvine, CA', 'company_name': 'Wayvia (formerly PriceSpider)', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50 ... (1159 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Jacksonville, FL', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 62062 ... (1236 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Cleveland, OH', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 620774), ... (1230 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Flower Mound, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 62091 ... (1236 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Joplin, MO', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 621046), 'i ... (1224 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Brownsville, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 621173 ... (1234 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Cheyenne, WY', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 621296),  ... (1228 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Providence, RI', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 621417) ... (1232 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Greenville, SC', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 621537) ... (1232 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Fort Worth, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 621654) ... (1232 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Des Moines, IA', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 621786) ... (1232 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Scranton, PA', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 621912),  ... (1228 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Tyler, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 622033), 'id ... (1222 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Seattle, WA', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 622153), ' ... (1226 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Lincoln, NE', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 622285), ' ... (1226 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Cedar Rapids, IA', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 62240 ... (1236 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Sugar Land, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 622545) ... (1232 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Midland, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 622667), ' ... (1226 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Houston, TX', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 622783), ' ... (1226 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Davenport, IA', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 622903), ... (1230 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Kettering, OH', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623030), ... (1230 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Gary, IN', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623150), 'id' ... (1220 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Montgomery, AL', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623264) ... (1232 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Jackson, MS', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623391), ' ... (1226 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Conway, AR', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623516), 'i ... (1224 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Milwaukee, WI', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623637), ... (1230 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Louisville, KY', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623750) ... (1232 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Dayton, OH', 'company_name': 'CXT Software', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623860), 'i ... (1224 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Columbus, OH', 'company_name': 'Ringside Talent', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 623983 ... (1247 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': '', 'company_name': 'BeyondTrust', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 624106), 'id': '3f56e9 ... (1149 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': '', 'company_name': 'Eutopia Solutions', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 624220), 'id': ' ... (1134 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': '', 'company_name': 'BeyondTrust', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 624331), 'id': '1b4a65 ... (1126 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Hampshire, England, UK', 'company_name': 'Copello Global', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 1 ... (1145 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Rosemont, IL', 'company_name': 'HARIBO of America, Inc.', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11 ... (1218 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'California, United States', 'company_name': 'Proven Sales', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50,  ... (1155 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': '', 'company_name': 'Wayvia (formerly PriceSpider)', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 6248 ... (1139 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'Jakarta, Jakarta, Indonesia', 'company_name': 'Tate & Lyle', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, ... (1174 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': '', 'company_name': 'Atticus Advisory Solutions Inc.', 'date_posted': datetime.datetime(2026, 1, 22, 15, 50, 11, 62 ... (1168 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'London Area, United Kingdom', 'company_name': 'Moriati Digital Recruitment', 'date_posted': datetime.datetime(2026 ... (1233 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}, {'source': 'linkedin', 'location': 'London Area, United Kingdom', 'company_name': 'The Lost Estate', 'date_posted': datetime.datetime(2026, 1, 22, 15, ... (1201 characters truncated) ... tion': None, 'form_complexity': None, 'company_id': None, 'local_bonus_applied': None, 'is_local': None, 'application_method': None, 'vertical': None}]]
