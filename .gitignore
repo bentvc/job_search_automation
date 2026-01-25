@@ -1,3 +1,6 @@
 # Ignore environment files containing secrets
 .env
 .env.*
+
+# Export marker (local state)
+.last_full_export

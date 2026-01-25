@@ -13,15 +13,21 @@ LUX_API_KEY = os.getenv('LUX_API_KEY')
 DEEPSEEK_API_KEY = os.getenv('DEEPSEEK_API_KEY')
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 MINIMAX_API_KEY = os.getenv('MINIMAX_API_KEY')
+Z_API_KEY = os.getenv('Z_API_KEY', '')  # z.ai backup
 
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./data/job_search.db')
+
+# Pipeline Configuration
+USE_V2_PIPELINE = os.getenv('USE_V2_PIPELINE', 'true').lower() == 'true'  # DeepSeek → Perplexity
+ENABLE_EXPERIMENTAL_COUNCIL = os.getenv('ENABLE_EXPERIMENTAL_COUNCIL', 'false').lower() == 'true'  # Legacy multi-agent
 
 # Default Models (Cost-Optimized Hierarchy)
 DEFAULT_OPENAI_MODEL = "gpt-4o"
 DEFAULT_ANTHROPIC_MODEL = "claude-3-5-sonnet-20240620"
 DEFAULT_DEEPSEEK_MODEL = "deepseek-chat"
 DEFAULT_OPENROUTER_MODEL = "deepseek/deepseek-chat"
-DEFAULT_MINIMAX_MODEL = "abab6.5s-chat"  # Ultra-cheap for batch scoring
+DEFAULT_MINIMAX_MODEL = "MiniMax-M2.1"  # M2.1 via Anthropic API
+DEFAULT_Z_MODEL = "z-1"  # z.ai model
 
 # Apollo Target Titles
 APOLLO_PRIMARY_GTM_TITLES = [
@@ -102,7 +108,43 @@ INDUSTRY_LIST_URLS = [
     'https://builtin.com/companies?location=colorado',
 ]
 
+# Mailgun Configuration
+MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY')
+MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN', 'mg.freeboard-advisory.com')
+MAILGUN_DOMAIN_FREEBOARD = os.getenv('MAILGUN_DOMAIN_FREEBOARD', MAILGUN_DOMAIN)
+MAILGUN_DOMAIN_CHRISTIANSEN = os.getenv('MAILGUN_DOMAIN_CHRISTIANSEN', MAILGUN_DOMAIN)
+
 # Scoring & Enrichment
 MIN_OVERALL_SCORE_TO_SCRAPE_HM = 60
 TIER_1_THRESHOLD = 80
 MAX_CONTACTS_PER_COMPANY = 5
+
+# Growth Signal Scoring Weights (for explosive growth, escape velocity, profitability)
+GROWTH_SIGNAL_WEIGHTS = {
+    'funding_round': 25,
+    'hiring_spike': 20,
+    'employee_growth': 15,
+    'profitability_signal': 30,
+    'leadership_change': 10,
+    'partnership_announcement': 10,
+    'award_recognition': 5,
+}
+
+# Company Fit Scoring Criteria (prioritize explosive growth companies)
+COMPANY_FIT_CRITERIA = {
+    'explosive_growth': {
+        'employee_growth_90d': 20,
+        'revenue_growth': 15,
+        'funding_recent': 10,
+    },
+    'escape_velocity': {
+        'series_b_or_later': 15,
+        'profitable': 20,
+        'market_leader': 10,
+    },
+    'profitability': {
+        'profitable': 25,
+        'positive_cash_flow': 15,
+        'path_to_profitability': 10,
+    }
+}

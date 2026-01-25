@@ -85,20 +85,28 @@ def run_signal_monitor():
                 existing = db.query(CompanySignal).filter(CompanySignal.source_url == sig['url']).first()
                 if existing: continue
                 
+                from scoring import score_signal_lead
+                signals = db.query(CompanySignal).filter(CompanySignal.company_id == company.id).all()
+                rules_score = score_signal_lead(company, signals)
+                
                 analysis = score_signal(company, sig['text'])
                 if not analysis: continue
                 
+                urgency_score = analysis.get('urgency_score', 0)
+                # Final score: 50% LLM urgency, 50% Rules-based fit
+                final_fit_score = int(urgency_score * 0.5 + rules_score * 0.5)
+
                 new_sig = CompanySignal(
                     company_id=company.id,
                     signal_type=analysis.get('signal_type', sig['type']),
                     signal_date=datetime.now(),
                     signal_text=sig['text'],
-                    score=analysis.get('urgency_score', 0),
+                    score=urgency_score,
                     source_url=sig['url']
                 )
                 db.add(new_sig)
                 
-                if analysis.get('is_trigger') and analysis.get('urgency_score', 0) >= 50:
+                if analysis.get('is_trigger') and urgency_score >= 50:
                     # Find top contact for this company to personalize outreach
                     contact = db.query(Contact).filter(Contact.company_id == company.id).order_by(Contact.confidence_score.desc()).first()
                     
@@ -112,7 +120,10 @@ def run_signal_monitor():
                         signal_summary=email_draft.get('outreach_angle'),
                         fit_explanation=f"Trigger: {sig['text']}",
                         draft_email=email_draft.get('draft_email'),
-                        priority_score=analysis.get('urgency_score'),
+                        priority_score=urgency_score,
+                        fit_score=final_fit_score,
+                        lead_type='signal_only',
+                        outreach_type='signal_intro',
                         status='queued'
                     )
                     db.add(outreach)

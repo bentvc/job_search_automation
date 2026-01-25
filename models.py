@@ -149,7 +149,24 @@ class ProactiveOutreach(Base):
     outreach_type = Column(String(50), default='job_intro')  # job_intro, signal_intro, followup_1, followup_2
     signal_summary = Column(Text)
     fit_explanation = Column(Text)
-    draft_email = Column(Text)
+    
+    # LEGACY: Council insights and draft (deprecated, use ds_* and px_* fields)
+    insights = Column(Text, nullable=True)  # Markdown from Council of Agents
+    draft_email = Column(Text, nullable=True)
+    
+    # V2 PIPELINE: DeepSeek stage (local analysis + draft)
+    ds_wedge = Column(String, nullable=True)  # e.g., "Value-Based Care"
+    ds_rationale = Column(Text, nullable=True)  # Why this wedge
+    ds_key_points = Column(JSON, nullable=True)  # List of proof points
+    ds_raw_draft = Column(Text, nullable=True)  # First-pass email
+    
+    # V2 PIPELINE: Perplexity stage (web-grounded finalization)
+    px_final_email = Column(Text, nullable=True)  # Send-ready email
+    px_factual_flags = Column(JSON, nullable=True)  # List of unresolved issues
+    px_confidence = Column(Numeric, nullable=True)  # 0-1 confidence score
+    px_citations = Column(JSON, nullable=True)  # Optional structured citations
+    
+    lead_type = Column(String(50), nullable=True)  # job_posting, signal_only
     priority_score = Column(Integer)
     fit_score = Column(Integer, default=0)  # Copied from job/company for queue ordering
     status = Column(String(100), default='queued')  # queued, snoozed, sent, replied, dismissed

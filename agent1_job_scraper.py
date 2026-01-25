@@ -131,40 +131,40 @@ def score_job_concurrent(job_id, provider):
         Return JSON: {{"overall_score": int, "vertical": "string", "explanation": "string"}}
         """
         
+        from scoring import score_job_posting
+        rules_score = score_job_posting(job.company, job)
+        
         response = call_llm(prompt, response_format="json", forced_provider=provider)
         result = parse_json_from_llm(response)
         
         if result:
-            score = result.get('overall_score', 0)
+            llm_score = result.get('overall_score', 0)
             vert = result.get('vertical', 'other').lower()
+            
+            # Combine scores: 60% LLM, 40% Rules
+            final_score = int(llm_score * 0.6 + rules_score * 0.4)
             
             # Post-processing hard overrides
             # 1. Sales Ops / Enablement Nuke - 100% enforcement
             ops_terms = ["sales operations", "sales ops", "enablement", "revops", "revenue operations", "rev ops", "coordinator", "assistant"]
             if any(term in title_l for term in ops_terms) and "vp" not in title_l and "director" not in title_l:
-                score = min(score, 30)
+                final_score = min(final_score, 30)
                 job.status = 'rejected'
             
-            # 2. Vertical Logic Boosts/Caps
-            if vert in ['payer', 'healthcare']:
-                score = min(score + 20, 100) # Strongest boost
-            elif vert == 'fintech':
-                score = min(score + 10, 100)
-            elif vert == 'other' or vert == 'general_saas':
-                score = min(score, 75) # Cap generic roles so they don't occupy top slots
-            
-            # 3. Explicit Rejection for low scores
-            if score < 40:
+            # 2. Rejection for low scores
+            if final_score < 40:
                 job.status = 'rejected'
-            elif score >= 80:
+            elif final_score >= 80:
                 job.status = 'shortlisted'
             else:
                 job.status = 'scored'
 
-            db.add(JobScore(job_id=job.id, overall_score=score, notes=result.get('explanation', '')))
+            db.add(JobScore(job_id=job.id, overall_score=final_score, notes=result.get('explanation', '')))
             job.vertical = vert
+            # Update job fit_score for queue prioritization
+            job.fit_score_boost = final_score # Just for internal tracking if needed, but we use JobScore
             db.commit()
-            logger.info(f"✅ Scored ({provider}): {job.title} -> {score} [{vert}]")
+            logger.info(f"✅ Scored ({provider}): {job.title} -> {final_score} (LLM: {llm_score}, Rules: {rules_score}) [{vert}]")
     except Exception as e:
         logger.error(f"Scoring error for job {job_id}: {e}")
     finally:

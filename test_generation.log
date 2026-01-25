@@ -1,0 +1,213 @@
+/home/bent-christiansen/Projects/job_search_automation/test_generation_comparison.py:30: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = session.query(Company).get(outreach.company_id)
+/home/bent-christiansen/Projects/job_search_automation/test_generation_comparison.py:31: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  contact = session.query(Contact).get(outreach.contact_id) if outreach.contact_id else None
+INFO:__main__:
+================================================================================
+INFO:__main__:TEST CASE 1: Gravie (other)
+INFO:__main__:Contact: Steven - Chief Executive Officer
+INFO:__main__:================================================================================
+
+INFO:__main__:🚀 METHOD 1: MiniMax API + Verification
+INFO:sync_leads:Verified Gravie vertical: healthcare (was: other)
+INFO:utils:Discovered best minimax model: abab6.5s-chat
+INFO:httpx:HTTP Request: POST https://api.minimax.chat/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+ERROR:utils:Minimax failed with model abab6.5s-chat: Error code: 401 - {'type': 'error', 'error': {'type': 'authorized_error', 'message': 'invalid api key (2049)', 'http_code': '401'}, 'request_id': '05c4b328dd186b7d1bd1fcf62485c46e'}
+INFO:utils:Discovered best openai model: gpt-4o
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:sync_leads:Using MiniMax API for Gravie (fast mode)
+INFO:httpx:HTTP Request: POST https://api.minimax.chat/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+ERROR:utils:Minimax failed with model abab6.5s-chat: Error code: 401 - {'type': 'error', 'error': {'type': 'authorized_error', 'message': 'invalid api key (2049)', 'http_code': '401'}, 'request_id': '05c4b32b1b106a84fdd9027a3ca4ac03'}
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:sync_leads:⚠️  Draft for Gravie FAILED verification!
+WARNING:sync_leads:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect']
+INFO:__main__:✅ MiniMax completed in 21.9s
+INFO:__main__:Verification: ⚠️ FLAGGED
+WARNING:__main__:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect']
+INFO:__main__:
+--------------------------------------------------------------------------------
+
+INFO:__main__:🏠 METHOD 2: Local DeepSeek + Verification
+INFO:sync_leads:Verified Gravie vertical: healthcare (was: other)
+INFO:sync_leads:Using local DeepSeek-R1 for Gravie (FREE)
+WARNING:sync_leads:⚠️  Draft for Gravie FAILED verification!
+WARNING:sync_leads:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect']
+INFO:__main__:✅ Local DeepSeek completed in 32.6s
+INFO:__main__:Verification: ⚠️ FLAGGED
+WARNING:__main__:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect']
+INFO:__main__:
+================================================================================
+INFO:__main__:COMPARISON FOR Gravie:
+INFO:__main__:  MiniMax:       21.9s
+INFO:__main__:  Local DeepSeek: 32.6s
+INFO:__main__:  Speed ratio:    1.5x slower (local)
+INFO:__main__:================================================================================
+
+INFO:__main__:📧 MINIMAX DRAFT:
+INFO:__main__:[⚠️  NEEDS REVIEW - Possible false claims]
+
+Subject: Unleashing Growth in Healthcare at Gravie
+
+Hi Steven,
+
+I hope this message finds you well. I am reaching out to share a unique opportunity to discuss how my extensive background in healthcare, specifically within payer/provider markets and value-b...
+
+INFO:__main__:📧 LOCAL DRAFT:
+INFO:__main__:[⚠️  NEEDS REVIEW - Possible false claims]
+
+Hi Steven,
+
+I hope this message finds you well. I came across Gravie and was impressed by your work in the healthcare space. With 15+ years as a Senior Commercial Executive, specializing in payer/healthcare markets, I’ve successfully scaled revenue from $0...
+
+INFO:__main__:
+================================================================================
+
+/home/bent-christiansen/Projects/job_search_automation/test_generation_comparison.py:30: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = session.query(Company).get(outreach.company_id)
+/home/bent-christiansen/Projects/job_search_automation/test_generation_comparison.py:31: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  contact = session.query(Contact).get(outreach.contact_id) if outreach.contact_id else None
+INFO:__main__:
+================================================================================
+INFO:__main__:TEST CASE 2: Heidi Health Foundation (other)
+INFO:__main__:Contact: Alix - Co-Founder, Chief Growth Officer & Chief Commercial Officer (CGO & CCO)
+INFO:__main__:================================================================================
+
+INFO:__main__:🚀 METHOD 1: MiniMax API + Verification
+INFO:sync_leads:Verified Heidi Health Foundation vertical: healthcare (was: other)
+INFO:httpx:HTTP Request: POST https://api.minimax.chat/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+ERROR:utils:Minimax failed with model abab6.5s-chat: Error code: 401 - {'type': 'error', 'error': {'type': 'authorized_error', 'message': 'invalid api key (2049)', 'http_code': '401'}, 'request_id': '05c4b35c474bd055a2392bf5938c2a5d'}
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:sync_leads:Using MiniMax API for Heidi Health Foundation (fast mode)
+INFO:httpx:HTTP Request: POST https://api.minimax.chat/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+ERROR:utils:Minimax failed with model abab6.5s-chat: Error code: 401 - {'type': 'error', 'error': {'type': 'authorized_error', 'message': 'invalid api key (2049)', 'http_code': '401'}, 'request_id': '05c4b360f087270751c9a93a07d93e10'}
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:sync_leads:⚠️  Draft for Heidi Health Foundation FAILED verification!
+WARNING:sync_leads:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect']
+INFO:__main__:✅ MiniMax completed in 24.2s
+INFO:__main__:Verification: ⚠️ FLAGGED
+WARNING:__main__:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect']
+INFO:__main__:
+--------------------------------------------------------------------------------
+
+INFO:__main__:🏠 METHOD 2: Local DeepSeek + Verification
+INFO:sync_leads:Verified Heidi Health Foundation vertical: saas (was: other)
+INFO:sync_leads:Using local DeepSeek-R1 for Heidi Health Foundation (FREE)
+WARNING:sync_leads:Primary model failed for Heidi Health Foundation, using fallback
+INFO:httpx:HTTP Request: POST https://api.minimax.chat/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+ERROR:utils:Minimax failed with model abab6.5s-chat: Error code: 401 - {'type': 'error', 'error': {'type': 'authorized_error', 'message': 'invalid api key (2049)', 'http_code': '401'}, 'request_id': '05c4b37ee3d3d7255d9daa8219fa8807'}
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:sync_leads:⚠️  Draft for Heidi Health Foundation FAILED verification!
+WARNING:sync_leads:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect']
+INFO:__main__:✅ Local DeepSeek completed in 26.7s
+INFO:__main__:Verification: ⚠️ FLAGGED
+WARNING:__main__:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect']
+INFO:__main__:
+================================================================================
+INFO:__main__:COMPARISON FOR Heidi Health Foundation:
+INFO:__main__:  MiniMax:       24.2s
+INFO:__main__:  Local DeepSeek: 26.7s
+INFO:__main__:  Speed ratio:    1.1x slower (local)
+INFO:__main__:================================================================================
+
+INFO:__main__:📧 MINIMAX DRAFT:
+INFO:__main__:[⚠️  NEEDS REVIEW - Possible false claims]
+
+Subject: Proven Growth Leadership for Heidi Health Foundation's Next Stage
+
+Hi Alix,
+
+I hope this message finds you well. As Heidi Health Foundation navigates its exciting growth phase, I wanted to introduce myself as a seasoned commercial executive with o...
+
+INFO:__main__:📧 LOCAL DRAFT:
+INFO:__main__:[⚠️  NEEDS REVIEW - Possible false claims]
+
+Subject: Strategic Insights for Accelerating Heidi Health Foundation's Growth
+
+Hi Alix,
+
+I hope this message finds you well. I'm reaching out to share some strategic insights on revenue scaling and team performance from my experience as a Senior Commercial...
+
+INFO:__main__:
+================================================================================
+
+INFO:__main__:
+================================================================================
+INFO:__main__:TEST CASE 3: Heidi Health Foundation (other)
+INFO:__main__:Contact: Alix - Co-Founder, Chief Growth Officer & Chief Commercial Officer (CGO & CCO)
+INFO:__main__:================================================================================
+
+INFO:__main__:🚀 METHOD 1: MiniMax API + Verification
+INFO:sync_leads:Verified Heidi Health Foundation vertical: saas (was: other)
+INFO:httpx:HTTP Request: POST https://api.minimax.chat/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+ERROR:utils:Minimax failed with model abab6.5s-chat: Error code: 401 - {'type': 'error', 'error': {'type': 'authorized_error', 'message': 'invalid api key (2049)', 'http_code': '401'}, 'request_id': '05c4b38f8c1dd2f78b8dc36c77e43c4a'}
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:sync_leads:Using MiniMax API for Heidi Health Foundation (fast mode)
+INFO:httpx:HTTP Request: POST https://api.minimax.chat/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+ERROR:utils:Minimax failed with model abab6.5s-chat: Error code: 401 - {'type': 'error', 'error': {'type': 'authorized_error', 'message': 'invalid api key (2049)', 'http_code': '401'}, 'request_id': '05c4b391001d3d67f15879c31e656512'}
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:sync_leads:⚠️  Draft for Heidi Health Foundation FAILED verification!
+WARNING:sync_leads:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect', 'Potential false claim detected: no evidence']
+INFO:__main__:✅ MiniMax completed in 17.4s
+INFO:__main__:Verification: ⚠️ FLAGGED
+WARNING:__main__:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect', 'Potential false claim detected: no evidence']
+INFO:__main__:
+--------------------------------------------------------------------------------
+
+INFO:__main__:🏠 METHOD 2: Local DeepSeek + Verification
+INFO:sync_leads:Verified Heidi Health Foundation vertical: saas (was: other)
+INFO:sync_leads:Using local DeepSeek-R1 for Heidi Health Foundation (FREE)
+WARNING:sync_leads:⚠️  Draft for Heidi Health Foundation FAILED verification!
+WARNING:sync_leads:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect', 'Potential false claim detected: no evidence']
+INFO:__main__:✅ Local DeepSeek completed in 15.3s
+INFO:__main__:Verification: ⚠️ FLAGGED
+WARNING:__main__:Issues: ['Potential false claim detected: false claim', 'Potential false claim detected: incorrect', 'Potential false claim detected: no evidence']
+INFO:__main__:
+================================================================================
+INFO:__main__:COMPARISON FOR Heidi Health Foundation:
+INFO:__main__:  MiniMax:       17.4s
+INFO:__main__:  Local DeepSeek: 15.3s
+INFO:__main__:  Speed ratio:    0.9x slower (local)
+INFO:__main__:================================================================================
+
+INFO:__main__:📧 MINIMAX DRAFT:
+INFO:__main__:[⚠️  NEEDS REVIEW - Possible false claims]
+
+Subject: Unlocking New Growth Avenues for Heidi Health Foundation
+
+Hi Alix,
+
+I hope this message finds you well. With a background as a seasoned commercial executive, I specialize in scaling operations within sophisticated B2B and SaaS environments, aligni...
+
+INFO:__main__:📧 LOCAL DRAFT:
+INFO:__main__:[⚠️  NEEDS REVIEW - Possible false claims]
+
+Final email text...
+
+INFO:__main__:
+================================================================================
+
+INFO:__main__:
+================================================================================
+INFO:__main__:FINAL SUMMARY
+INFO:__main__:================================================================================
+INFO:__main__:
+MiniMax API:
+INFO:__main__:  Avg time: 21.2s
+INFO:__main__:  Verified: 0/3
+INFO:__main__:  Cost estimate: $0.012
+INFO:__main__:
+Local DeepSeek:
+INFO:__main__:  Avg time: 24.9s
+INFO:__main__:  Verified: 0/3
+INFO:__main__:  Cost estimate: $0.000 (FREE)
+INFO:__main__:
+Speed comparison: Local is 1.2x slower than MiniMax
+INFO:__main__:Cost for 24 records:
+INFO:__main__:  MiniMax: $0.10
+INFO:__main__:  Local:   $0.00
+INFO:__main__:
+================================================================================
+INFO:__main__:RECOMMENDATION:
+INFO:__main__:  Local DeepSeek is acceptable if you can wait ~60-90 minutes
+INFO:__main__:  MiniMax is 10x faster for just $0.10 total
+INFO:__main__:================================================================================
