@@ -4,3 +4,22 @@
 
 # Export marker (local state)
 .last_full_export
+.last_summary_export
+
+# Python
+__pycache__/
+*.pyc
+
+# Local Data
+data/*.db
+*.db
+*.log
+*.csv
+
+# UI/Streamlit
+.streamlit/
+streamlit.log
+
+# Temp/Misc
+codebase_summary_*.md
+SCRAPING_TEST_GUIDE.md

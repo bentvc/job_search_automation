@@ -160,6 +160,19 @@ def score_job_concurrent(job_id, provider):
                 job.status = 'scored'
 
             db.add(JobScore(job_id=job.id, overall_score=final_score, notes=result.get('explanation', '')))
+            
+            # Log to Audit table
+            from models import LeadCategorizationAudit
+            audit = LeadCategorizationAudit(
+                company_name=job.company_name,
+                role_title=job.title,
+                job_url=job.url,
+                signal_source='job_scraper',
+                job_posting_detected=True,
+                final_lead_type='job_posting'
+            )
+            db.add(audit)
+            
             job.vertical = vert
             # Update job fit_score for queue prioritization
             job.fit_score_boost = final_score # Just for internal tracking if needed, but we use JobScore

@@ -12,3 +12,4 @@ python-dotenv
 sqlalchemy
 pydantic
 pandas
+PyYAML

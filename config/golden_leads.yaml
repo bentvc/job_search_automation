@@ -1,0 +1,49 @@
+# Golden Leads for Scoring Validation
+- company_name: "Gravie"
+  vertical: "benefits"
+  location: "Minneapolis, MN"
+  expected_fit_tier: "high"
+  expected_lead_type: "job_posting"
+  is_local: false
+
+- company_name: "Evolent Health"
+  vertical: "payer"
+  location: "Arlington, VA"
+  expected_fit_tier: "high"
+  expected_lead_type: "job_posting"
+  is_local: false
+
+- company_name: "GitLab"
+  vertical: "devops"
+  location: "Remote"
+  expected_fit_tier: "medium"
+  expected_lead_type: "signal_only"
+  is_local: false
+
+- company_name: "SonderMind"
+  vertical: "healthtech"
+  location: "Denver, CO"
+  expected_fit_tier: "high"
+  expected_lead_type: "job_posting"
+  is_local: true
+
+- company_name: "Deputy"
+  vertical: "generic_saas"
+  location: "Sydney, Australia"
+  expected_fit_tier: "low"
+  expected_lead_type: "job_posting"
+  is_local: false
+
+- company_name: "Molina Healthcare"
+  vertical: "payer"
+  location: "Long Beach, CA"
+  expected_fit_tier: "high"
+  expected_lead_type: "signal_only"
+  is_local: false
+
+- company_name: "Experity"
+  vertical: "healthtech"
+  location: "Machesney Park, IL"
+  expected_fit_tier: "high"
+  expected_lead_type: "job_posting"
+  is_local: false

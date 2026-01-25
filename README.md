@@ -19,9 +19,9 @@ A three-agent system to automate discovery and outreach for senior enterprise sa
 ### Streamlit UI (localhost)
 1. Open the Streamlit dashboard (`streamlit run ui_streamlit.py`)
 2. In the sidebar, find **📦 Export Codebase**
-3. **🚀 Create Export** — Full export, then SCP to `C:\Users\chris\Downloads`
-4. **🔄 Incremental Export** — Only files changed since last full export, then SCP (requires a prior full export)
-5. Use **📥 Download Export** as fallback if SCP fails; expand **🔧 SCP command** to run manually on Windows
+3. **🚀 Create Export** — Full summary, then SCP to `C:\Users\chris\Downloads`
+4. **🔄 Incremental Export** — Only files changed since last summary, then SCP
+5. Use **📥 Download Summary** as fallback if SCP fails; expand **🔧 SCP command** to run manually on Windows
 
 ### Command Line
 ```bash
@@ -42,10 +42,10 @@ python create_export.py --local-path "C:\Users\chris\Documents"
 Run from Windows PowerShell (paths from script output):
 
 ```powershell
-scp user@remote:/path/to/export.zip "C:\Users\chris\Downloads\export.zip"
+scp user@remote:/path/to/summary.md "C:\Users\chris\Downloads\summary.md"
 ```
 
-**Note:** Full export excludes databases, logs, cache (~2.6MB). Incremental uses `.last_full_export`; add it to `.gitignore`.
+**Note:** Full summary excludes databases, logs, cache. Incremental uses `.last_summary_export`; added to `.gitignore`.
 
 ## Setup
 1. Install dependencies:

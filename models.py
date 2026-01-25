@@ -71,6 +71,7 @@ class Job(Base):
     local_bonus_applied = Column(Integer)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    last_seen_at = Column(DateTime, server_default=func.now())
     source_urls = Column(JSON)
     
     company = relationship("Company", back_populates="jobs")
@@ -166,7 +167,16 @@ class ProactiveOutreach(Base):
     px_confidence = Column(Numeric, nullable=True)  # 0-1 confidence score
     px_citations = Column(JSON, nullable=True)  # Optional structured citations
     
+    # Metadata for traceability (copied from Job or Signals)
+    job_url = Column(String(1000), nullable=True)
+    job_source = Column(String(100), nullable=True)
+    job_location = Column(String(255), nullable=True)
+    job_snippet = Column(Text, nullable=True)
+    role_title = Column(String(255), nullable=True)
+    
     lead_type = Column(String(50), nullable=True)  # job_posting, signal_only
+    test_run_id = Column(String(100), nullable=True) # For golden set isolation
+    test_scores = Column(JSON, nullable=True) # { "v1": 85, "v2": 90 }
     priority_score = Column(Integer)
     fit_score = Column(Integer, default=0)  # Copied from job/company for queue ordering
     status = Column(String(100), default='queued')  # queued, snoozed, sent, replied, dismissed
@@ -178,3 +188,42 @@ class ProactiveOutreach(Base):
     company = relationship("Company", foreign_keys=[company_id])
     contact = relationship("Contact", foreign_keys=[contact_id])
     job = relationship("Job", foreign_keys=[job_id])
+
+class LeadCategorizationAudit(Base):
+    __tablename__ = 'lead_categorization_audit'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_name = Column(String(255))
+    role_title = Column(String(500), nullable=True)
+    job_url = Column(String(1000), nullable=True)
+    signal_source = Column(String(100)) # job_scraper, signal_monitor, lead_sync
+    job_posting_detected = Column(Boolean, default=False)
+    signal_only_detected = Column(Boolean, default=False)
+    final_lead_type = Column(String(50))
+    timestamp = Column(DateTime, server_default=func.now())
+
+class GoldenLead(Base):
+    __tablename__ = 'golden_leads'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_name = Column(String(255))
+    vertical = Column(String(100))
+    location = Column(String(255), nullable=True)
+    expected_fit_tier = Column(String(20)) # high, medium, low
+    expected_lead_type = Column(String(50)) # job_posting, signal_only
+    is_local = Column(Boolean, default=False)
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
+
+class CandidateGoldenLead(Base):
+    __tablename__ = 'candidate_golden_leads'
+    
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_name = Column(String(255))
+    vertical = Column(String(100))
+    location = Column(String(255), nullable=True)
+    actual_fit_score = Column(Integer)
+    actual_lead_type = Column(String(50))
+    reason_flagged = Column(Text) # "High mismatch", "Suspicious vertical", etc.
+    source_outreach_id = Column(String(36), nullable=True)
+    created_at = Column(DateTime, server_default=func.now())

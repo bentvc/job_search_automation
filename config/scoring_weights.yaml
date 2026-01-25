@@ -1,0 +1,32 @@
+# Scoring Weights Configuration
+vertical_fit:
+  healthcare_payer: 70
+  healthcare_general: 50
+  fintech: 30
+  enterprise_gtm: 25
+  generic_saas: 10
+  unaligned: 5
+
+lead_type_bonus:
+  job_posting: 20
+  signal_only: 10
+
+location_bonus:
+  colorado_radius: 15
+
+signal_strength:
+  funding: 20
+  product_launch: 15
+  leadership_change: 15
+  hiring_spike: 10
+  generic: 5
+
+rejection_threshold: 40
+shortlist_threshold: 80
+
+recency_bonus:
+  lt_24h: 40
+  lt_72h: 25
+  lt_1w: 10
+  lt_2w: 0
+  gt_2w: -20

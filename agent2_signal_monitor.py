@@ -107,6 +107,18 @@ def run_signal_monitor():
                 db.add(new_sig)
                 
                 if analysis.get('is_trigger') and urgency_score >= 50:
+                    # Log to Audit table
+                    from models import LeadCategorizationAudit
+                    audit = LeadCategorizationAudit(
+                        company_name=company.name,
+                        role_title=None,
+                        job_url=sig['url'],
+                        signal_source='signal_monitor',
+                        signal_only_detected=True,
+                        final_lead_type='signal_only'
+                    )
+                    db.add(audit)
+
                     # Find top contact for this company to personalize outreach
                     contact = db.query(Contact).filter(Contact.company_id == company.id).order_by(Contact.confidence_score.desc()).first()
                     

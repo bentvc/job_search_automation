@@ -1,21 +1,29 @@
 """
-Export utility for creating codebase archives.
+Export utility for creating a single-file codebase summary.
 Excludes large data files, logs, and cache directories.
-Supports full and incremental (changes since last export) exports.
+Supports full and incremental (changes since last export) summaries.
+Results in a single Markdown file optimized for LLM consumption.
 """
 import os
-import zipfile
-import tempfile
 import fnmatch
 from datetime import datetime
 from pathlib import Path
 
 # Marker file storing timestamp of last full export (epoch seconds)
 PROJECT_ROOT = Path(__file__).parent.absolute()
-LAST_EXPORT_MARKER = PROJECT_ROOT / ".last_full_export"
+LAST_EXPORT_MARKER = PROJECT_ROOT / ".last_summary_export"
 
+def get_last_export_timestamp() -> float | None:
+    """Return epoch seconds of last summary export, or None if never."""
+    if not LAST_EXPORT_MARKER.exists():
+        return None
+    try:
+        t = float(LAST_EXPORT_MARKER.read_text().strip())
+        return t if t > 0 else None
+    except Exception:
+        return None
 
-# Patterns to exclude from export
+# Patterns to exclude from summary
 EXCLUDE_PATTERNS = [
     # Cache and compiled files
     '__pycache__',
@@ -47,27 +55,23 @@ EXCLUDE_PATTERNS = [
     '.DS_Store',
     'Thumbs.db',
     
-    # Large data directories
+    # Large data directories or specific project exclusions
     'data/',
     'debug/',
+    'venv/',
+    'node_modules/',
+    '.git/',
     
-    # Docker and build artifacts
+    # Build and backup
     '*.bak',
-    
-    # Git (optional - you might want to include .gitignore)
-    # '.git',
+    '*.zip',
+    'codebase_summary_*.md',
+    '.last_summary_export'
 ]
 
-
 def should_exclude(file_path: str, root_dir: str) -> bool:
-    """Check if a file or directory should be excluded from export."""
+    """Check if a file or directory should be excluded from summary."""
     rel_path = os.path.relpath(file_path, root_dir)
-    
-    # Also exclude the marker and any export zip in project
-    if LAST_EXPORT_MARKER.as_posix() in file_path or ".last_full_export" in rel_path:
-        return True
-    if rel_path.endswith(".zip") and "export" in rel_path.lower():
-        return True
     
     # Check against exclude patterns
     for pattern in EXCLUDE_PATTERNS:
@@ -85,114 +89,129 @@ def should_exclude(file_path: str, root_dir: str) -> bool:
     
     return False
 
-
-def get_last_export_timestamp() -> float | None:
-    """Return epoch seconds of last full export, or None if never."""
-    if not LAST_EXPORT_MARKER.exists():
-        return None
+def is_binary(file_path: str) -> bool:
+    """Check if a file is binary."""
     try:
-        t = float(LAST_EXPORT_MARKER.read_text().strip())
-        return t if t > 0 else None
-    except Exception:
-        return None
+        with open(file_path, 'tr', encoding='utf-8') as f:
+            f.read(1024)
+            return False
+    except (UnicodeDecodeError, PermissionError):
+        return True
 
+def generate_directory_tree(root_dir: str, since_mtime: float | None = None) -> str:
+    """Generate a text-based directory tree of the project."""
+    tree = ["Project Structure:", "=" * 20]
+    for root, dirs, files in os.walk(root_dir):
+        # Filter directories in-place for os.walk
+        dirs[:] = [d for d in dirs if not should_exclude(os.path.join(root, d), root_dir)]
+        
+        level = os.path.relpath(root, root_dir).count(os.sep)
+        if os.path.relpath(root, root_dir) == '.':
+            level = 0
+            name = os.path.basename(root_dir)
+        else:
+            name = os.path.basename(root)
+            level += 1
+            
+        indent = '  ' * level
+        
+        # Check if any files in this dir or subdirs match the criteria
+        valid_files = []
+        for f in sorted(files):
+            f_path = os.path.join(root, f)
+            if not should_exclude(f_path, root_dir):
+                if since_mtime:
+                    try:
+                        if os.path.getmtime(f_path) > since_mtime:
+                            valid_files.append(f)
+                    except OSError:
+                        pass
+                else:
+                    valid_files.append(f)
+        
+        if valid_files or any(not should_exclude(os.path.join(root, d), root_dir) for d in dirs):
+            tree.append(f"{indent}{name}/")
+            sub_indent = '  ' * (level + 1)
+            for f in valid_files:
+                tree.append(f"{sub_indent}{f}")
+                
+    return "\n".join(tree)
 
-def set_last_export_timestamp(ts: float | None = None) -> None:
-    """Store timestamp of last full export (default: now)."""
-    ts = ts if ts is not None else datetime.now().timestamp()
-    LAST_EXPORT_MARKER.write_text(str(ts))
-
-
-def _add_files_to_zip(zipf, project_root: Path, output_path: str, since_mtime: float | None = None) -> int:
-    """Add matching project files to zip. Optionally only files modified after since_mtime (epoch). Returns count."""
-    project_root_str = str(project_root)
-    n = 0
-    for root, dirs, files in os.walk(project_root):
-        dirs[:] = [d for d in dirs if not should_exclude(os.path.join(root, d), project_root_str)]
-        for file in files:
+def create_codebase_summary(output_path: str | None = None, incremental: bool = False) -> str:
+    """
+    Create a single Markdown file containing the codebase summary.
+    
+    Args:
+        output_path: Path for the output file. If None, created in PROJECT_ROOT.
+        incremental: If True, only include files changed since last export.
+    """
+    since_mtime = None
+    if incremental:
+        if LAST_EXPORT_MARKER.exists():
+            try:
+                since_mtime = float(LAST_EXPORT_MARKER.read_text().strip())
+            except ValueError:
+                pass
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    if output_path is None:
+        prefix = "incremental_summary" if incremental else "codebase_summary"
+        output_path = str(PROJECT_ROOT / f"{prefix}_{timestamp}.md")
+    
+    summary = []
+    summary.append(f"# Codebase Summary {'(Incremental)' if incremental else ''}")
+    summary.append(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    if since_mtime:
+        summary.append(f"Changes since: {datetime.fromtimestamp(since_mtime).strftime('%Y-%m-%d %H:%M:%S')}")
+    summary.append("\n" + generate_directory_tree(str(PROJECT_ROOT), since_mtime))
+    summary.append("\n" + "=" * 40 + "\n")
+    
+    file_count = 0
+    for root, dirs, files in os.walk(PROJECT_ROOT):
+        dirs[:] = [d for d in dirs if not should_exclude(os.path.join(root, d), str(PROJECT_ROOT))]
+        for file in sorted(files):
             file_path = os.path.join(root, file)
-            if should_exclude(file_path, project_root_str) or file_path == output_path:
+            if should_exclude(file_path, str(PROJECT_ROOT)) or file_path == output_path:
                 continue
-            if since_mtime is not None:
+            
+            if since_mtime:
                 try:
-                    m = os.path.getmtime(file_path)
-                    if m <= since_mtime:
+                    if os.path.getmtime(file_path) <= since_mtime:
                         continue
                 except OSError:
                     continue
-            arcname = os.path.relpath(file_path, project_root_str)
-            try:
-                zipf.write(file_path, arcname)
-                n += 1
-            except (OSError, PermissionError):
+            
+            if is_binary(file_path):
                 continue
-    return n
-
-
-def create_codebase_export(output_path: str | None = None) -> str:
-    """
-    Create a zip archive of the codebase excluding large files.
-    Updates .last_full_export marker after a successful full export.
+                
+            rel_path = os.path.relpath(file_path, PROJECT_ROOT)
+            summary.append(f"## File: {rel_path}")
+            
+            ext = os.path.splitext(file)[1].lstrip('.') or 'text'
+            summary.append(f"```{ext}")
+            
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    summary.append(f.read())
+            except Exception as e:
+                summary.append(f"Error reading file: {e}")
+            
+            summary.append("```\n")
+            file_count += 1
     
-    Args:
-        output_path: Optional path for the output zip file. If None, creates in temp directory.
+    if file_count == 0 and incremental:
+        return "No changes detected since last summary."
+        
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write("\n".join(summary))
     
-    Returns:
-        Path to the created zip file.
-    """
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    if output_path is None:
-        output_dir = tempfile.gettempdir()
-        output_path = os.path.join(output_dir, f"job_search_automation_export_{timestamp}.zip")
-    else:
-        d = os.path.dirname(output_path)
-        if d:
-            os.makedirs(d, exist_ok=True)
+    # Update marker
+    LAST_EXPORT_MARKER.write_text(str(datetime.now().timestamp()))
     
-    with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        _add_files_to_zip(zipf, PROJECT_ROOT, output_path, since_mtime=None)
-    
-    set_last_export_timestamp()
     return output_path
 
-
-def create_incremental_export(output_path: str | None = None) -> tuple[str | None, int]:
-    """
-    Create a zip of only files changed since the last full export.
-    
-    Args:
-        output_path: Optional path for the output zip. If None, uses temp directory.
-    
-    Returns:
-        (path to zip, number of files included). (None, 0) if no last export or no changes.
-    """
-    since = get_last_export_timestamp()
-    if since is None:
-        return None, 0
-    
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    if output_path is None:
-        output_dir = tempfile.gettempdir()
-        output_path = os.path.join(output_dir, f"job_search_automation_incremental_{timestamp}.zip")
-    else:
-        d = os.path.dirname(output_path)
-        if d:
-            os.makedirs(d, exist_ok=True)
-    
-    with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        n = _add_files_to_zip(zipf, PROJECT_ROOT, output_path, since_mtime=since)
-    
-    if n == 0:
-        try:
-            os.remove(output_path)
-        except OSError:
-            pass
-        return None, 0
-    return output_path, n
-
-
-def get_export_size_mb(zip_path: str) -> float:
-    """Get the size of the export file in MB."""
-    if os.path.exists(zip_path):
-        return os.path.getsize(zip_path) / (1024 * 1024)
-    return 0.0
+if __name__ == "__main__":
+    import sys
+    inc = "--incremental" in sys.argv
+    path = create_codebase_summary(incremental=inc)
+    print(f"Summary created: {path}")

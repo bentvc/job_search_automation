@@ -226,10 +226,29 @@ def sync_leads():
             if co: j.company_id = co.id
         db.commit()
 
-        # 2. Sync shortlisted jobs (Reactive) - NOW USES LLM
-        shortlisted = db.query(Job).filter(Job.status == 'shortlisted').all()
-        for j in shortlisted:
-            if not j.company_id: continue
+        # 2. Sync high-fit jobs (Reactive) - Pulls shortlisted and scored jobs >= 60
+        sync_candidates = db.query(Job).filter(Job.status.in_(['shortlisted', 'scored'])).all()
+        for j in sync_candidates:
+            # Skip 'scored' jobs if they are too low
+            from models import JobScore
+            js = db.query(JobScore).filter(JobScore.job_id == j.id).order_by(JobScore.created_at.desc()).first()
+            if j.status == 'scored' and (not js or js.overall_score < 60):
+                continue
+                
+            if not j.company_id: 
+                # Auto-provision company if it doesn't exist
+                logger.info(f"Auto-provisioning company: {j.company_name}")
+                new_co = Company(
+                    id=str(uuid.uuid4()),
+                    name=j.company_name,
+                    vertical=j.vertical or 'unknown',
+                    hq_location=j.location,
+                    fit_score=js.overall_score if js else 0
+                )
+                db.add(new_co)
+                db.flush()
+                j.company_id = new_co.id
+                db.commit()
             
             # Check if we already have an outreach for this job
             existing = db.query(ProactiveOutreach).filter(
@@ -244,11 +263,19 @@ def sync_leads():
                 company = db.query(Company).get(j.company_id)
                 contact = db.query(Contact).filter(Contact.company_id == j.company_id).order_by(Contact.confidence_score.desc()).first()
                 
-                # Generate Content
+                # Generate Content (Handle missing contact)
                 from scoring import score_job_posting
                 job_rules_score = score_job_posting(company, j)
                 
-                content = generate_outreach_content(company, contact, job=j, signal=f"Job Posting: {j.title}")
+                if contact:
+                    content = generate_outreach_content(company, contact, job=j, signal=f"Job Posting: {j.title}")
+                else:
+                    content = {
+                        'outreach_angle': 'Contact Research Needed',
+                        'insights': 'Found high-fit job but no decision-maker contact in DB yet.',
+                        'draft_email': None
+                    }
+
                 if not content: continue
 
                 outreach = ProactiveOutreach(
@@ -262,9 +289,27 @@ def sync_leads():
                     draft_email=content.get('draft_email'),
                     priority_score=95, status='queued',
                     fit_score=job_rules_score,
-                    next_action_at=datetime.utcnow()
+                    next_action_at=datetime.utcnow(),
+                    # Traceability metadata
+                    job_url=j.url,
+                    job_source=j.source,
+                    job_location=j.location,
+                    job_snippet=j.description[:500] if j.description else None,
+                    role_title=j.title
                 )
                 db.add(outreach)
+                
+                # Log to Audit table
+                from models import LeadCategorizationAudit
+                audit = LeadCategorizationAudit(
+                    company_name=j.company_name,
+                    role_title=j.title,
+                    job_url=j.url,
+                    signal_source='lead_sync',
+                    job_posting_detected=True,
+                    final_lead_type='job_posting'
+                )
+                db.add(audit)
         
         # 3. Proactive: Pull high-fit companies
         top_universe = db.query(Company).filter(Company.fit_score >= 80).all()
@@ -298,6 +343,18 @@ def sync_leads():
                             next_action_at=datetime.utcnow()
                         )
                         db.add(outreach)
+
+                        # Log to Audit table
+                        from models import LeadCategorizationAudit
+                        audit = LeadCategorizationAudit(
+                            company_name=co.name,
+                            role_title=None,
+                            job_url=None,
+                            signal_source='lead_sync',
+                            signal_only_detected=True,
+                            final_lead_type='signal_only'
+                        )
+                        db.add(audit)
         
         db.commit()
     finally:
