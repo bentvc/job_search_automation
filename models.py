@@ -229,3 +229,16 @@ class CandidateGoldenLead(Base):
     reason_flagged = Column(Text) # "High mismatch", "Suspicious vertical", etc.
     source_outreach_id = Column(String(36), nullable=True)
     created_at = Column(DateTime, server_default=func.now())
+
+class OutboundEmail(Base):
+    __tablename__ = 'outbound_emails'
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    outreach_id = Column(String(36), ForeignKey('proactive_outreach.id'), nullable=True)
+    recipient_email = Column(String(255))
+    sender_email = Column(String(255))
+    email_type = Column(String(20), default='primary') # primary, audit
+    subject = Column(String(255))
+    body_text = Column(Text)
+    mailgun_message_id = Column(String(255))
+    status = Column(String(50), default='sent')
+    created_at = Column(DateTime, server_default=func.now())

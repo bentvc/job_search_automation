@@ -1,3 +1,16 @@
+# Codebase Summary (Incremental)
+Date: 2026-01-26 11:24:52
+Changes since: 2026-01-26 11:11:18
+
+Project Structure:
+====================
+job_search_automation/
+  ui_streamlit.py
+
+========================================
+
+## File: ui_streamlit.py
+```py
 import streamlit as st
 import logging
 logger = logging.getLogger(__name__)
@@ -249,10 +262,9 @@ def get_queue(session, filter_types=None):
     if filter_types:
         filtered = []
         for i in items:
-            # Exclude sent if Hide Sent is checked, UNLESS it's the currently active one
-            if 'Hide Sent' in filter_types and i.status == 'sent': 
-                if st.session_state.get("active_outreach_id") != i.id:
-                    continue
+            # Exclude sent if Hide Sent is checked (passed as special string in types or separate arg? 
+            # Let's assume filter_types contains 'Hide Sent' if checked)
+            if 'Hide Sent' in filter_types and i.status == 'sent': continue
             
             if 'Job Applications' in filter_types and 'job' in i.outreach_type: filtered.append(i)
             elif 'Signal Outreaches' in filter_types and 'signal' in i.outreach_type: filtered.append(i)
@@ -473,23 +485,7 @@ def main():
                 
                 for cid, items in grouped_items.items():
                     # Pick best item (highest priority/score)
-                    # FIX: If one of the items is the *pinned active outreach*, force it to be the representative
-                    forced_id = st.session_state.get("active_outreach_id")
-                    
-                    # Sort default way first
-                    sorted_items = sorted(items, key=lambda x: (x.priority_score or 0, x.fit_score or 0), reverse=True)
-                    best_item = sorted_items[0]
-                    
-                    if forced_id:
-                        found_pinned = next((i for i in items if i.id == forced_id), None)
-                        if found_pinned:
-                            best_item = found_pinned
-                    
-                    # IMPORTANT: If 'Hide Sent' is active, but the pinned item IS SENT, we must NOT filter it out
-                    # The higher level filter (before grouping) might have removed it, so we need to address that earlier 
-                    # OR we handle it here if we move filtering.
-                    # Currently filtering happens inside 'get_queue'.
-                    
+                    best_item = sorted(items, key=lambda x: (x.priority_score or 0, x.fit_score or 0), reverse=True)[0]
                     representative_map[best_item.id] = items # Store full list
                     
                     # Aggregate stats
@@ -617,57 +613,27 @@ def main():
             with st.sidebar:
                 st.markdown("---")
                 st.subheader("🕵️ Contact Finder")
-                st.caption(f"Outreach ID: {outreach.id[:8]}")
                 
-                # --- CONTACT FINDER: AUTHORITATIVE RENDER LOGIC ---
-                assigned_contact = outreach.contact
-                sent_primary = None
-                
-                if assigned_contact:
-                    # Check if we already sent a primary email to this contact
-                    # Note: We check DB email + current enriched email to be robust
-                    check_email = assigned_contact.email or effective_email
-                    if check_email:
-                        sent_primary = get_last_outbound_email(
-                            check_email,
-                            company.name
-                        )
+                # Show current assignment
+                if contact:
+                    # Show effective email source
+                    email_display = f"`{effective_email}`" if effective_email else "*No verified email*"
+                    if effective_email != contact.email: email_display += " (from cache)"
+                    st.info(f"**Assigned:** {effective_name}\n\n{email_display}")
 
-                if assigned_contact:
-                    # --- DISPLAY ASSIGNED CONTACT (ALWAYS) ---
-                    # Invariant 1: Assignment is Authoritative
-                    st.markdown(f"**Assigned:** {assigned_contact.name}")
-
-                    # Email display logic
-                    if assigned_contact.email:
-                        st.code(assigned_contact.email)
-                    elif sent_primary:
-                        # Invariant 2: Sent contacts are sticky
-                        st.caption("📨 Email previously sent (address on file)")
-                    elif effective_email:
-                         # Invariant 2.5: Enriched email available (but not saved to DB record yet)
-                         st.code(effective_email)
-                         st.caption("(Enriched/Cached)")
-                    else:
-                        st.caption("⚠️ No email currently available")
-
-                    # Status badge
-                    if sent_primary:
-                        st.success(f"✅ Email sent • {sent_primary['created_at'].strftime('%b %d')}")
+                    # --- Contact Record Lite (Sent Status) ---
+                    last_email = get_last_outbound_email(effective_email, company.name)
+                    if last_email:
+                        st.success(f"✅ **SENT** • {last_email['created_at'].strftime('%b %d')}")
                         with st.expander("View Last Email", expanded=False):
-                            st.caption(f"**Subject:** {sent_primary['subject']}")
-                            st.caption(f"**Ref:** {sent_primary['mailgun_message_id']}")
-                            st.text(sent_primary['body_text'])
+                            st.caption(f"**Subject:** {last_email['subject']}")
+                            st.caption(f"**Ref:** {last_email['mailgun_message_id']}")
+                            st.text(last_email['body_text'])
                     else:
-                        st.info("⏳ Not sent yet")
-
-                    # Never fall back to CEO / AI / Apollo here
-                    st.divider()
-
+                        st.markdown("**Status:** `Not Sent (Primary)`")
+                    # ---------------------------------------------
                 else:
-                    # --- NO ASSIGNMENT YET ---
                     st.warning("No contact assigned")
-                    st.caption("Use search below to find and assign one.")
                 
                 st.caption(f"Target: {company.name}")
                 
@@ -713,12 +679,7 @@ def main():
                                 st.error(str(e))
                 
                 with c_search3:
-                    # FIX: Disable AI Research if we already have an assigned contact
-                    ai_disabled = (outreach.contact_id is not None)
-                    if st.button("AI Research", help="Ask Perplexity for Names + Strategy" + (" (Disabled: Contact Assigned)" if ai_disabled else ""), use_container_width=True, disabled=ai_disabled):
-                         if ai_disabled:
-                             st.warning("Contact already assigned. Unassign or manually edit to research others.")
-                         else:
+                    if st.button("AI Research", help="Ask Perplexity for Names + Strategy", use_container_width=True):
                          st.session_state.pop(f"contacts_{outreach.id}", None)
                          with st.status("🤖 AI Researching...", expanded=True) as status:
                             try:
@@ -1361,13 +1322,6 @@ def main():
                                         
                                         status.update(label="✅ Sent successfully!", state="complete")
                                         st.success(f"Email sent to {final_target_email}!")
-                                        
-                                        # --- LOCK SELECTION (Fix Context Switching) ---
-                                        # Pin the current outreach ID so the UI doesn't jump to the next item in the group
-                                        # This prevents the "Stephen sent -> Seth appears" confusion
-                                        st.session_state["active_outreach_id"] = outreach.id
-                                        # -----------------------------------------------
-                                        
                                         time.sleep(1)
                                         st.rerun()
                                     else:
@@ -1459,3 +1413,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+```

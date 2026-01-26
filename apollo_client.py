@@ -5,11 +5,24 @@ from typing import List, Dict, Any
 
 logger = logging.getLogger(__name__)
 
+def _log_payload(payload: dict, max_len: int = 800) -> str:
+    try:
+        s = json.dumps(payload, default=str)
+    except Exception:
+        s = str(payload)
+    return (s[:max_len] + "...") if len(s) > max_len else s
+
+def _log_response_keys(data: dict) -> str:
+    try:
+        return str(list(data.keys()))
+    except Exception:
+        return "non-dict-json"
+
 class ApolloClient:
     """
     Client for interacting with the Apollo.io API to find decision makers.
     """
-    BASE_URL = "https://api.apollo.io/v1"
+    BASE_URL = "https://api.apollo.io/api/v1"
 
     def __init__(self, api_key: str = None):
         # Force reload .env to ensure fresh key
@@ -27,11 +40,12 @@ class ApolloClient:
     def search_organizations(self, company_name: str) -> List[Dict[str, Any]]:
         """
         Search for an organization by name to find its domain.
+        Uses /mixed_companies/search (API v1).
         """
         if not self.api_key or "your_" in self.api_key:
             return []
 
-        endpoint = f"{self.BASE_URL}/organizations/search"
+        endpoint = f"{self.BASE_URL}/mixed_companies/search"
         payload = {
             "q_organization_name": company_name,
             "page": 1,
@@ -39,12 +53,18 @@ class ApolloClient:
         }
 
         try:
+            logger.info(f"[Apollo] POST {endpoint} payload={_log_payload(payload)}")
             logger.info(f"Sending Apollo request with Key: {self.api_key[:4]}...{self.api_key[-4:] if self.api_key else 'None'}")
             response = requests.post(endpoint, json=payload, headers=self.headers, timeout=15)
+            
+            logger.info(f"[Apollo] status={response.status_code}")
+            
             if response.status_code == 200:
                 data = response.json()
-                orgs = data.get("organizations", [])
-                logger.info(f"Apollo found {len(orgs)} potential companies. Response keys: {list(data.keys())}")
+                logger.info(f"[Apollo] Reponse keys: {_log_response_keys(data)}")
+                # Smoke test confirms 'organizations' and 'accounts' both appear.
+                # Prioritize organizations, fallback to accounts.
+                orgs = data.get("organizations") or data.get("accounts") or []
                 if not orgs:
                      logger.warning(f"Response dump: {str(data)[:200]}")
                 return orgs
@@ -82,9 +102,14 @@ class ApolloClient:
             return []
 
         try:
+            logger.info(f"[Apollo] POST {endpoint} payload={_log_payload(payload)}")
+            
             response = requests.post(endpoint, json=payload, headers=self.headers, timeout=15)
+            logger.info(f"[Apollo] status={response.status_code}")
+            
             if response.status_code == 200:
                 data = response.json()
+                logger.info(f"[Apollo] Response keys: {_log_response_keys(data)}")
                 people = data.get("people", [])
                 logger.info(f"Apollo found {len(people)} contacts")
                 return people
@@ -187,12 +212,16 @@ class ApolloClient:
         }
         
         try:
+            logger.info(f"[Apollo] GET {endpoint}")
+            
             resp = requests.get(endpoint, headers=self.headers, timeout=10)
             out["http_status"] = resp.status_code
+            logger.info(f"[Apollo] status={resp.status_code}")
             
             try:
                 data = resp.json()
                 out["raw_response"] = data
+                logger.info(f"[Apollo] Response keys: {_log_response_keys(data)}")
                 
                 # Check directly for person object (GET /people/:id usually returns the object directly or {"person": ...})
                 if "person" in data:
@@ -205,6 +234,57 @@ class ApolloClient:
                 
         except Exception as e:
             logger.error(f"Failed to unlock {person_id}: {e}")
+            out["error"] = str(e)
+            
+        return out
+        
+    def reveal_person_email(self, person_id: str) -> Dict[str, Any]:
+        """
+        Pay a credit to REVEAL a specific person's email using /people/bulk_match.
+        Uses ID-based matching.
+        """
+        if not self.api_key: return {"error": "No API Key"}
+        
+        endpoint = f"{self.BASE_URL}/people/bulk_match"
+        
+        payload = {
+            "details": [{"id": person_id}],
+            "reveal_personal_emails": True
+        }
+        
+        out = {
+            "endpoint": endpoint,
+            "method": "POST",
+            "payload_sent": payload,
+            "http_status": None,
+            "raw_response": None,
+            "parsed_person": None,
+            "credits_consumed": None
+        }
+        
+        try:
+            logger.info(f"[Apollo] POST {endpoint} payload={_log_payload(payload)}")
+            
+            resp = requests.post(endpoint, json=payload, headers=self.headers, timeout=15)
+            out["http_status"] = resp.status_code
+            logger.info(f"[Apollo] status={resp.status_code}")
+            
+            try:
+                data = resp.json()
+                out["raw_response"] = data
+                out["credits_consumed"] = data.get("credits_consumed")
+                logger.info(f"[Apollo] Response keys: {_log_response_keys(data)}")
+                
+                matches = data.get("matches", [])
+                if matches:
+                    out["parsed_person"] = matches[0]
+                    logger.info(f"[Apollo] Matches[0] keys: {_log_response_keys(matches[0])}")
+                    
+            except Exception:
+                out["raw_response"] = resp.text[:1000]
+                
+        except Exception as e:
+            logger.error(f"Failed to reveal {person_id}: {e}")
             out["error"] = str(e)
             
         return out

@@ -11,74 +11,664 @@ Collecting usage statistics. To deactivate, set browser.gatherUsageStats to fals
 
 INFO:numexpr.utils:Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
 INFO:numexpr.utils:NumExpr defaulting to 16 threads.
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:243: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   outreach = session.query(ProactiveOutreach).get(selected_id)
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:392: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:713: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:943: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   age_h = (datetime.utcnow() - posted_ts).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   outreach = session.query(ProactiveOutreach).get(selected_id)
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:392: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:713: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:943: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   age_h = (datetime.utcnow() - posted_ts).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   outreach = session.query(ProactiveOutreach).get(selected_id)
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   outreach = session.query(ProactiveOutreach).get(selected_id)
-INFO:apollo_client:Resolving domain for Gravie...
+INFO:mailgun_client:✅ Email sent successfully via Mailgun: <20260126162353.1e0c9643991782a8@freeboard-advisory.com>
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:1130: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  outreach.sent_at = datetime.utcnow()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:243: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:943: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  age_h = (datetime.utcnow() - posted_ts).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:943: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  age_h = (datetime.utcnow() - posted_ts).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+INFO:mailgun_client:✅ Email sent successfully via Mailgun: <20260126165559.c783bb4cd19cf449@freeboard-advisory.com>
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:1130: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  outreach.sent_at = datetime.utcnow()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+INFO:mailgun_client:✅ Email sent successfully via Mailgun: <20260126171155.43fa83fce9b9466c@freeboard-advisory.com>
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:1130: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  outreach.sent_at = datetime.utcnow()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+INFO:mailgun_client:✅ Email sent successfully via Mailgun: <20260126171745.ce67b80921412e3f@freeboard-advisory.com>
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:1130: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  outreach.sent_at = datetime.utcnow()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:1117: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:1117: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:243: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:243: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:1117: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+INFO:apollo_client:Resolving domain for Evolent Health...
+INFO:apollo_client:[Apollo] POST https://api.apollo.io/api/v1/mixed_companies/search payload={"q_organization_name": "Evolent Health", "page": 1, "per_page": 3}
 INFO:apollo_client:Sending Apollo request with Key: eWsn...Q7hA
-INFO:apollo_client:Apollo found 3 potential companies. Response keys: ['breadcrumbs', 'partial_results_only', 'has_join', 'disable_eu_prospecting', 'partial_results_limit', 'pagination', 'num_fetch_result', 'model_ids', 'organizations']
-INFO:apollo_client:Broad search at gravie.com / ID 54a128bb69702d8cfcc07101...
-INFO:apollo_client:Apollo found 16 contacts
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+INFO:apollo_client:[Apollo] status=200
+INFO:apollo_client:[Apollo] Reponse keys: ['breadcrumbs', 'partial_results_only', 'has_join', 'disable_eu_prospecting', 'partial_results_limit', 'pagination', 'accounts', 'organizations', 'model_ids', 'num_fetch_result', 'derived_params']
+INFO:apollo_client:Broad search at None / ID 54a1180569702d58e49b0100...
+INFO:apollo_client:[Apollo] POST https://api.apollo.io/api/v1/mixed_people/api_search payload={"person_titles": ["Chief Revenue Officer", "CRO", "Chief Commercial Officer", "CCO", "Chief Growth Officer", "CGO", "VP Sales", "SVP Sales", "Head of Sales", "VP Revenue", "VP Business Development", "VP Partnerships", "VP Customer Success", "VP Enterprise Sales", "Director of Sales", "CEO", "Founder", "Co-Founder", "President", "COO", "VP Payer Partnerships", "VP Provider Partnerships", "VP Healthcare", "Head of Payer Strategy", "VP Market Engagement"], "page": 1, "per_page": 50, "contact_email_status": ["verified"], "organization_ids": ["54a1180569702d58e49b0100"]}
+INFO:apollo_client:[Apollo] status=200
+INFO:apollo_client:[Apollo] Response keys: ['total_entries', 'people']
+INFO:apollo_client:Apollo found 2 contacts
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   outreach = session.query(ProactiveOutreach).get(selected_id)
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
-  outreach = session.query(ProactiveOutreach).get(selected_id)
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
-  outreach = session.query(ProactiveOutreach).get(selected_id)
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:392: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:716: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  age_label = "N/A"
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+INFO:apollo_client:[Apollo] GET https://api.apollo.io/api/v1/people/66f620fb672c7000017046a3
+INFO:apollo_client:[Apollo] status=200
+INFO:apollo_client:[Apollo] Response keys: ['person']
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   outreach = session.query(ProactiveOutreach).get(selected_id)
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:370: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  hours_old = (datetime.utcnow() - posted_at).total_seconds() / 3600
-/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:389: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+INFO:__main__:[UI] Overlay Contact 66f620fb672c7000017046a3: cache_email=email_not_unlocked@domain.com display_email=email_not_unlocked@domain.com
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
   outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+INFO:__main__:[UI] Overlay Contact 66f620fb672c7000017046a3: cache_email=email_not_unlocked@domain.com display_email=email_not_unlocked@domain.com
+INFO:apollo_client:[Apollo] POST https://api.apollo.io/api/v1/people/bulk_match payload={"details": [{"id": "66f620fb672c7000017046a3"}], "reveal_personal_emails": true}
+INFO:apollo_client:[Apollo] status=200
+INFO:apollo_client:[Apollo] Response keys: ['status', 'error_code', 'error_message', 'total_requested_enrichments', 'matches', 'unique_enriched_records', 'missing_records', 'credits_consumed']
+INFO:apollo_client:[Apollo] Matches[0] keys: ['id', 'first_name', 'last_name', 'name', 'linkedin_url', 'title', 'photo_url', 'twitter_url', 'github_url', 'facebook_url', 'extrapolated_email_confidence', 'headline', 'organization_id', 'employment_history', 'street_address', 'city', 'state', 'country', 'postal_code', 'formatted_address', 'time_zone', 'email', 'email_status', 'organization', 'departments', 'subdepartments', 'seniority', 'functions', 'intent_strength', 'show_intent', 'email_domain_catchall', 'revealed_for_current_team', 'personal_emails']
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+INFO:__main__:[UI] Overlay Contact 66f620fb672c7000017046a3: cache_email=szander@evolent.com display_email=szander@evolent.com
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+INFO:__main__:[UI] Overlay Contact 66f620fb672c7000017046a3: cache_email=szander@evolent.com display_email=szander@evolent.com
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+INFO:__main__:[UI] Overlay Contact 66f620fb672c7000017046a3: cache_email=szander@evolent.com display_email=szander@evolent.com
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:955: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signals = session.query(CompanySignal).filter(CompanySignal.company_id == outreach.company_id).all()
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+INFO:__main__:[UI] Overlay Contact 66f620fb672c7000017046a3: cache_email=szander@evolent.com display_email=szander@evolent.com
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:961: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  source = outreach.job_source or (job.source if job else 'unknown')
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:243: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  (ProactiveOutreach.next_action_at <= datetime.utcnow()) | (ProactiveOutreach.next_action_at == None),
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:463: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hours = (datetime.utcnow() - posted_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:518: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  outreach = session.query(ProactiveOutreach).get(selected_id)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:521: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  job = session.query(Job).get(outreach.job_id) if outreach.job_id else None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:964: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  cols[0].write(f"Vertical: {bd['vertical_score']}")
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+INFO:pipeline_v2:Perplexity finalizing Evolent Health (web search enabled, attempt 1)...
+WARNING:pipeline_v2:Perplexity attempt 1 failed: Expecting value: line 1 column 1 (char 0). Retrying in 2s...
+INFO:pipeline_v2:Perplexity finalizing Evolent Health (web search enabled, attempt 2)...
+INFO:pipeline_v2:✅ Perplexity completed for Evolent Health (confidence: 0.90)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:522: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:990: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ctx_location = outreach.job_location or (outreach.job.location if outreach.job else None)
+INFO:mailgun_client:✅ Email sent successfully via Mailgun (Batch): <20260126180731.47331eefa8f8f0ee@freeboard-advisory.com>
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:1243: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:500: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ago = f" • {hrs:.1f}h ago"
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:500: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ago = f" • {hrs:.1f}h ago"
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:464: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  if hours < 72: recent = True
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:500: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ago = f" • {hrs:.1f}h ago"
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:519: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  company = outreach.company
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:480: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  options_list.sort(key=lambda x: int(x[0].split()[1]) if x[0].split()[1].isdigit() else 0, reverse=True)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:516: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:480: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  options_list.sort(key=lambda x: int(x[0].split()[1]) if x[0].split()[1].isdigit() else 0, reverse=True)
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:516: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:554: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  # Persist to session for editor
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:554: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  # Persist to session for editor
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:554: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  # Persist to session for editor
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:554: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  # Persist to session for editor
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:554: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  # Persist to session for editor
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:554: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  # Persist to session for editor
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:554: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  # Persist to session for editor
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:244: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  ProactiveOutreach.test_run_id == None
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:499: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  hrs = (datetime.utcnow() - i.updated_at).total_seconds() / 3600
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:535: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  
+/home/bent-christiansen/Projects/job_search_automation/ui_streamlit.py:554: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  # Persist to session for editor

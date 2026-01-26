@@ -3,6 +3,7 @@ Mailgun integration for sending outreach emails.
 Supports multiple sender addresses: bent@freeboard-advisory.com and bent@christiansen-advisory.com
 """
 import logging
+import json
 import requests
 import os
 from typing import Optional, Dict, Any
@@ -16,6 +17,9 @@ MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY')
 MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN', 'mg.freeboard-advisory.com')  # Default fallback
 MAILGUN_DOMAIN_FREEBOARD = os.getenv('MAILGUN_DOMAIN_FREEBOARD', MAILGUN_DOMAIN)
 MAILGUN_DOMAIN_CHRISTIANSEN = os.getenv('MAILGUN_DOMAIN_CHRISTIANSEN', MAILGUN_DOMAIN)
+
+# Default BCC for auditing
+DEFAULT_BCC_EMAIL = 'bent@freeboard-advisory.com'
 
 # Sender addresses and domains
 SENDER_ADDRESSES = {
@@ -33,13 +37,16 @@ def send_email_via_mailgun(
     body: str,
     sender_key: str = 'freeboard',
     reply_to: Optional[str] = None,
-    tags: Optional[list] = None
+    tags: Optional[list] = None,
+    extra_headers: Optional[Dict[str, str]] = None
 ) -> Dict[str, Any]:
     """
-    Send an email via Mailgun API.
+    Send an email via Mailgun API using Batch Sending.
+    Recipients (including audit logs) are explicit in 'to' but isolated via 'recipient-variables'.
     """
     # Force reload config to pick up .env changes without server restart
     load_dotenv(override=True)
+    import config  # Local import to avoid circular dependency
     
     api_key = os.getenv('MAILGUN_API_KEY')
     domain = os.getenv('MAILGUN_DOMAIN', 'mg.freeboard-advisory.com')
@@ -63,13 +70,27 @@ def send_email_via_mailgun(
     
     if not domain:
         return {"success": False, "error": "Mailgun domain not configured for sender"}
-    
+
+    # Prepare detailed recipient list (Primary + Audit)
+    recipients = [to_email]
+    if hasattr(config, 'DEFAULT_BCC_EMAIL') and config.DEFAULT_BCC_EMAIL:
+        # User requested explicit "To" sending for audit logs
+        # Using Batch Sending to keep them invisible to each other
+        if config.DEFAULT_BCC_EMAIL != to_email:
+            recipients.append(config.DEFAULT_BCC_EMAIL)
+
+    # Magic: recipient-variables triggers Batch Sending (individual emails)
+    # This ensures "to_email" doesn't see "audit_email" etc.
+    # Use empty dict as per "world-class" recommendation
+    recipient_vars = {r: {} for r in recipients}
+
     data = {
         "from": f"Bent Christiansen <{sender_email}>",
-        "to": to_email,
+        "to": recipients, # Requests handles list by sending multiple 'to' params
         "subject": subject,
         "text": body,
-        "html": body.replace('\n', '<br>')
+        "html": body.replace('\n', '<br>'),
+        "recipient-variables": json.dumps(recipient_vars)
     }
     
     if reply_to:
@@ -77,6 +98,12 @@ def send_email_via_mailgun(
     
     if tags:
         data["o:tag"] = tags
+        
+    if extra_headers:
+        for k, v in extra_headers.items():
+            if k.startswith("X-") or k.startswith("h:"):
+                key = k if k.startswith("h:") else f"h:{k}"
+                data[key] = v
     
     try:
         base_url = f"https://api.mailgun.net/v3/{domain}"
@@ -90,11 +117,12 @@ def send_email_via_mailgun(
         if response.status_code == 200:
             result = response.json()
             message_id = result.get('id', 'unknown')
-            logger.info(f"✅ Email sent successfully via Mailgun: {message_id}")
+            logger.info(f"✅ Email sent successfully via Mailgun (Batch): {message_id}")
             return {
                 "success": True,
                 "message_id": message_id,
-                "sender": sender_email
+                "sender": sender_email,
+                "sent_to": recipients  # Return exact list for audit logging
             }
         else:
             error_msg = f"Mailgun API error: {response.status_code} - {response.text}"
