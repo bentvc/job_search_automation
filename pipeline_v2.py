@@ -161,6 +161,13 @@ Analyze this opportunity and produce the strategic JSON output.
 # Perplexity Stage: Web-Grounded Finalization
 # ============================================================================
 
+BENT_SIGNATURE = """
+Best regards,
+Bent Christiansen
+Email: bent@freeboard-advisory.com
+LinkedIn: https://www.linkedin.com/in/bent-christiansen/
+"""
+
 PERPLEXITY_SYSTEM_PROMPT = """
 You are an expert enterprise sales leader writing high-stakes outbound emails to C-suite leaders in healthtech.
 
@@ -169,6 +176,7 @@ TASK:
 2) Write a compelling, concise outbound email (150-220 words).
 3) You MUST use the strategic "wedge" and "proof points" provided by the previous analysis.
 4) Tone: Senior, professional, non-salesy, and high-value. Focus on how the sender's specific experience solves a problem relevant to the wedge.
+5) IMPORTANT: Write the email body only. Do not add any name, signature, or contact info; the system will append a fixed signature.
 
 Return ONLY valid JSON with:
 {
@@ -300,6 +308,31 @@ TASK:
             
             if "factual_flags" not in parsed:
                 parsed["factual_flags"] = []
+            
+            # Append Signature (forcing it)
+            if parsed.get("final_email"):
+                body = parsed["final_email"].rstrip()
+                
+                # Aggressively strip common placeholders
+                placeholders = ["[Your Name]", "[Sender Name]", "[My Name]", "Best regards,", "Best,", "Sincerely,"]
+                lines = body.split('\n')
+                
+                # Check last few lines for placeholders
+                cleaned_lines = []
+                # Keep everything up to the first sign-off
+                skip_rest = False
+                for line in reversed(lines):
+                    if any(p in line for p in placeholders):
+                         # If we hit a placeholder line, skip it
+                         continue
+                    cleaned_lines.insert(0, line)
+                
+                # Re-assemble
+                body = "\n".join(cleaned_lines).strip()
+                
+                # Simple check to avoid double signature if model ignored instructions
+                if "Bent Christiansen" not in body:
+                    parsed["final_email"] = f"{body}\n\n{BENT_SIGNATURE.strip()}\n"
             
             logger.info(f"✅ Perplexity completed for {company} (confidence: {parsed['confidence']:.2f})")
             return parsed

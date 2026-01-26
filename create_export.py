@@ -151,6 +151,7 @@ def run_export_and_transfer(
     """
     out = {
         "path": None,
+        "filename": None,
         "size_mb": 0.0,
         "scp_command": None,
         "scp_success": False,
@@ -163,6 +164,7 @@ def run_export_and_transfer(
             return out
             
         out["path"] = path
+        out["filename"] = os.path.basename(path)
         out["size_mb"] = get_file_size_mb(path)
         
         ssh_info = get_ssh_connection_info()

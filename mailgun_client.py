@@ -37,25 +37,31 @@ def send_email_via_mailgun(
 ) -> Dict[str, Any]:
     """
     Send an email via Mailgun API.
-    
-    Args:
-        to_email: Recipient email address
-        subject: Email subject line
-        body: Email body (plain text or HTML)
-        sender_key: Which sender address to use ('freeboard' or 'christiansen')
-        reply_to: Optional reply-to address
-        tags: Optional list of tags for tracking
-    
-    Returns:
-        Dict with 'success' (bool) and 'message_id' or 'error'
     """
-    if not MAILGUN_API_KEY:
+    # Force reload config to pick up .env changes without server restart
+    load_dotenv(override=True)
+    
+    api_key = os.getenv('MAILGUN_API_KEY')
+    domain = os.getenv('MAILGUN_DOMAIN', 'mg.freeboard-advisory.com')
+    
+    # Resolve domain based on sender key
+    if sender_key == 'freeboard':
+        domain = os.getenv('MAILGUN_DOMAIN_FREEBOARD', domain)
+    elif sender_key == 'christiansen':
+        domain = os.getenv('MAILGUN_DOMAIN_CHRISTIANSEN', domain)
+        
+    sender_addresses = {
+        'freeboard': 'bent@freeboard-advisory.com',
+        'christiansen': 'bent@christiansen-advisory.com'
+    }
+    
+    if not api_key:
         logger.error("MAILGUN_API_KEY not configured")
         return {"success": False, "error": "Mailgun API key not configured"}
     
-    sender_email = SENDER_ADDRESSES.get(sender_key, SENDER_ADDRESSES['freeboard'])
-    sender_domain = SENDER_DOMAINS.get(sender_key, MAILGUN_DOMAIN)
-    if not sender_domain:
+    sender_email = sender_addresses.get(sender_key, sender_addresses['freeboard'])
+    
+    if not domain:
         return {"success": False, "error": "Mailgun domain not configured for sender"}
     
     data = {
@@ -63,7 +69,7 @@ def send_email_via_mailgun(
         "to": to_email,
         "subject": subject,
         "text": body,
-        "html": body.replace('\n', '<br>')  # Simple HTML conversion
+        "html": body.replace('\n', '<br>')
     }
     
     if reply_to:
@@ -73,7 +79,7 @@ def send_email_via_mailgun(
         data["o:tag"] = tags
     
     try:
-        base_url = f"https://api.mailgun.net/v3/{sender_domain}"
+        base_url = f"https://api.mailgun.net/v3/{domain}"
         response = requests.post(
             f"{base_url}/messages",
             auth=("api", MAILGUN_API_KEY),
@@ -110,4 +116,38 @@ def choose_sender_address(company_name: str, contact_name: str) -> str:
     """
     # Simple rotation for now - can be enhanced
     # For now, default to freeboard
-    return 'freeboard'
+def send_mailgun_test_email() -> Dict[str, Any]:
+    """
+    Sends a smoke test email using the production domain configuration.
+    """
+    load_dotenv(override=True)
+    
+    api_key = os.getenv('MAILGUN_API_KEY')
+    domain = os.getenv('MAILGUN_DOMAIN_SALES', os.getenv('MAILGUN_DOMAIN'))
+    from_addr = os.getenv('MAILGUN_FROM_BENT', f"bent@{domain}")
+    to_addr = os.getenv('MAILGUN_TEST_RECIPIENT', from_addr)
+    
+    if not api_key:
+        return {"success": False, "error": "Missing MAILGUN_API_KEY"}
+    
+    try:
+        url = f"https://api.mailgun.net/v3/{domain}/messages"
+        response = requests.post(
+            url,
+            auth=("api", api_key),
+            data={
+                "from": from_addr,
+                "to": [to_addr],
+                "subject": "🚀 Mailgun smoke test from Cockpit",
+                "text": f"If you see this, Mailgun for {domain} is wired correctly.\n\nTimestamp: {os.popen('date').read().strip()}",
+            },
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            return {"success": True, "data": response.json()}
+        else:
+            return {"success": False, "error": f"{response.status_code}: {response.text}"}
+            
+    except Exception as e:
+        return {"success": False, "error": str(e)}
