@@ -11,8 +11,9 @@ lead_type_bonus:
   job_posting: 20
   signal_only: 10
 
+# Location affects priority_score only, not fit_score (fit = professional alignment only)
 location_bonus:
-  colorado_radius: 15
+  colorado_radius: 15   # applied as priority_boost in breakdown
 
 signal_strength:
   funding: 20
@@ -27,6 +28,15 @@ signal_strength_cap: 35
 rejection_threshold: 40
 shortlist_threshold: 80
 
+# Recency as multiplier (base_score * mult) so fresh junk doesn't outrank older perfect fit
+recency_multiplier:
+  lt_24h: 1.15
+  lt_72h: 1.10
+  lt_1w: 1.05
+  lt_2w: 1.0
+  gt_2w: 0.85
+
+# Legacy additive recency (kept for reference; scoring uses multiplier)
 recency_bonus:
   lt_24h: 40
   lt_72h: 25

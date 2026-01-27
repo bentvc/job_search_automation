@@ -30,6 +30,19 @@ SIGNAL_MONITOR_MAX_COMPANIES = os.getenv('SIGNAL_MONITOR_MAX_COMPANIES', '0')
 SIGNAL_MONITOR_MAX_SIGNALS_PER_COMPANY = os.getenv('SIGNAL_MONITOR_MAX_SIGNALS_PER_COMPANY', '0')
 SIGNAL_MONITOR_DISABLE_LLM = os.getenv('SIGNAL_MONITOR_DISABLE_LLM', 'false')
 
+# News Discovery (Agent 6) — topic queries, not company names
+NEWS_DISCOVERY_QUERIES = [
+    '"Series B" AND ("risk adjustment" OR "Medicare Advantage" OR "payer" OR "health plan")',
+    '"hires CRO" OR "names Chief Revenue Officer" AND (healthcare OR "health plan")',
+    '"raises" AND ("Medicaid" OR "Medicare" OR "utilization management" OR "payment integrity")',
+    '"Chief Revenue Officer" OR "CRO" AND (healthtech OR payer OR "health plan")',
+]
+NEWS_DISCOVERY_MAX_ARTICLES_PER_QUERY = int(os.getenv('NEWS_DISCOVERY_MAX_ARTICLES_PER_QUERY', '10'))
+NEWS_DISCOVERY_MAX_NEW_COMPANIES_PER_RUN = int(os.getenv('NEWS_DISCOVERY_MAX_NEW_COMPANIES_PER_RUN', '20'))
+NEWS_DISCOVERY_DISABLE_LLM = os.getenv('NEWS_DISCOVERY_DISABLE_LLM', 'false').strip().lower() == 'true'
+# Sieve: only enrich candidates with preliminary_fit_score >= this (Stage 3 "Investor")
+NEWS_DISCOVERY_SIEVE_THRESHOLD = int(os.getenv('NEWS_DISCOVERY_SIEVE_THRESHOLD', '80'))
+
 # Default Models (Cost-Optimized Hierarchy)
 DEFAULT_OPENAI_MODEL = "gpt-4o"
 DEFAULT_ANTHROPIC_MODEL = "claude-3-5-sonnet-20240620"

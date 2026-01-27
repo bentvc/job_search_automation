@@ -33,13 +33,15 @@ def load_weights():
         "location_bonus": {"colorado_radius": 15},
         "signal_strength": {"funding": 20, "product_launch": 15, "leadership_change": 15, "new_role_announcement": 22, "new_role_posting": 18, "hiring_spike": 10, "generic": 5},
         "signal_strength_cap": 35,
+        "recency_multiplier": {"lt_24h": 1.15, "lt_72h": 1.10, "lt_1w": 1.05, "lt_2w": 1.0, "gt_2w": 0.85},
         "role_fit_healthcare": {"revenue_bonus": 10, "reject_penalty": -35},
     }
 
 def score_lead(company: Optional[Company], job: Optional[Job] = None, signals: Optional[List[CompanySignal]] = None, weights: Optional[Dict[str, Any]] = None, return_breakdown: bool = False) -> Any:
     """
-    Unified scoring function for both job_posting and signal_only leads.
-    Returns: int (score) OR dict (if return_breakdown=True)
+    Unified scoring: fit = vertical + lead_type + signal + role. Recency is a multiplier.
+    Location is priority_boost only (callers add to priority_score). Hard reject for
+    healthcare + Ops/Enablement/Support in job title.
     """
     if not weights:
         weights = load_weights()
@@ -48,78 +50,69 @@ def score_lead(company: Optional[Company], job: Optional[Job] = None, signals: O
         "vertical_score": 0,
         "lead_type_score": 0,
         "location_score": 0,
+        "priority_boost": 0,  # add to priority_score, not fit
         "signal_score": 0,
-        "recency_score": 0,
+        "recency_multiplier": 1.0,
         "role_adjustment": 0,
         "global_adjustment": 0,
-        "final_score": 0
+        "base_score": 0,
+        "final_score": 0,
     }
     
-    score = 0
     vertical = (company.vertical if company and company.vertical else "").lower()
     comp_name = (company.name if company and company.name else (job.company_name if job and job.company_name else ""))
     comp_name = comp_name.lower()
+    is_healthcare_payer = any(k in vertical for k in ["payer", "plans", "managed care", "medicaid", "medicare", "benefits", "health plan"])
+    is_healthcare_general = any(k in vertical for k in ["health", "provider", "medical", "clinical", "care", "healthtech"])
+    is_healthcare = is_healthcare_payer or is_healthcare_general
 
-    # 0. Recency Score (for jobs)
-    if job:
-        r_weights = weights.get("recency_bonus", {})
-        posted = job.date_posted or job.created_at
-        if posted:
-            hours_old = (datetime.utcnow() - posted).total_seconds() / 3600
-            if hours_old <= 24:
-                breakdown["recency_score"] = r_weights.get("lt_24h", 40)
-            elif hours_old <= 72:
-                breakdown["recency_score"] = r_weights.get("lt_72h", 25)
-            elif hours_old <= 168: # 7 days
-                breakdown["recency_score"] = r_weights.get("lt_1w", 10)
-            elif hours_old <= 336: # 14 days
-                breakdown['recency_score'] = r_weights.get("lt_2w", 0)
-            else:
-                breakdown["recency_score"] = r_weights.get("gt_2w", -20)
-        score += breakdown["recency_score"]
-    
+    # Hard reject: healthcare + any Ops/Enablement/Support in job title → fit = 0
+    if job and is_healthcare:
+        title = (job.title or "").lower()
+        if any(r in title for r in REJECT_ROLE_KEYWORDS):
+            breakdown["final_score"] = 0
+            breakdown["priority_boost"] = weights.get("location_bonus", {}).get("colorado_radius", 15) if any(k in ((company.hq_location or "") + (job.location or "")).lower() for k in ["colorado", "denver", "boulder", "co"]) else 0
+            if return_breakdown:
+                return breakdown
+            return 0
+
     # 1. Vertical Fit
     v_weights = weights.get("vertical_fit", {})
-    if any(k in vertical for k in ["payer", "plans", "managed care", "medicaid", "medicare", "benefits", "health plan"]):
+    if is_healthcare_payer:
         breakdown["vertical_score"] = v_weights.get("healthcare_payer", 70)
-    elif any(k in vertical for k in ["health", "provider", "medical", "clinical", "care", "healthtech"]):
+    elif is_healthcare_general:
         breakdown["vertical_score"] = v_weights.get("healthcare_general", 50)
     elif any(k in vertical for k in ["fintech", "payments", "infrastructure", "banking", "billing"]):
         breakdown["vertical_score"] = v_weights.get("fintech", 30)
     elif any(k in vertical for k in ["devops", "software", "saas", "infrastructure"]):
-        if job and any(k in job.title.lower() for k in ["vp", "cro", "director", "head"]):
+        if job and any(k in (job.title or "").lower() for k in ["vp", "cro", "director", "head"]):
             breakdown["vertical_score"] = v_weights.get("enterprise_gtm", 25)
         else:
             breakdown["vertical_score"] = v_weights.get("generic_saas", 10)
     else:
         breakdown["vertical_score"] = v_weights.get("unaligned", 5)
     
-    score += breakdown["vertical_score"]
+    base = breakdown["vertical_score"]
 
-    # 2. Lead Type Bonus
+    # 2. Lead Type
     lt_weights = weights.get("lead_type_bonus", {})
-    if job:
-        breakdown["lead_type_score"] = lt_weights.get("job_posting", 20)
-    else:
-        breakdown["lead_type_score"] = lt_weights.get("signal_only", 10)
-    
-    score += breakdown["lead_type_score"]
+    breakdown["lead_type_score"] = lt_weights.get("job_posting", 20) if job else lt_weights.get("signal_only", 10)
+    base += breakdown["lead_type_score"]
 
-    # 3. Locality Score
+    # 3. Location → priority_boost only (not added to fit)
     loc_weights = weights.get("location_bonus", {})
     location = (company.hq_location if company else (job.location if job else "")) or ""
     location = location.lower()
     if any(k in location for k in ["colorado", "denver", "boulder", "co"]):
-        breakdown["location_score"] = loc_weights.get("colorado_radius", 15)
-    
-    score += breakdown["location_score"]
+        breakdown["location_score"] = breakdown["priority_boost"] = loc_weights.get("colorado_radius", 15)
+    # do not add to base
 
-    # 4. Signal strength
+    # 4. Signal strength (stack with cap)
     if signals:
         ss_weights = weights.get("signal_strength", {})
         bucket_scores: Dict[str, int] = {}
         for sig in signals:
-            txt = sig.signal_text.lower()
+            txt = (sig.signal_text or "").lower()
             if "new role posting" in txt:
                 bucket_scores["new_role_posting"] = max(bucket_scores.get("new_role_posting", 0), ss_weights.get("new_role_posting", 18))
             elif "new role announcement" in txt or "new role" in txt:
@@ -132,47 +125,56 @@ def score_lead(company: Optional[Company], job: Optional[Job] = None, signals: O
                 bucket_scores["leadership_change"] = max(bucket_scores.get("leadership_change", 0), ss_weights.get("leadership_change", 15))
             elif "hiring" in txt:
                 bucket_scores["hiring_spike"] = max(bucket_scores.get("hiring_spike", 0), ss_weights.get("hiring_spike", 10))
-
-        total_signal = sum(bucket_scores.values())
         cap = int(weights.get("signal_strength_cap", 35))
-        breakdown["signal_score"] = min(total_signal, cap)
-        score += breakdown["signal_score"]
+        breakdown["signal_score"] = min(sum(bucket_scores.values()), cap)
+        base += breakdown["signal_score"]
 
-    # 5. Role-specific adjustments
-    is_healthcare_payer = any(k in vertical for k in ["payer", "plans", "managed care", "medicaid", "medicare", "benefits", "health plan"])
-    is_healthcare_general = any(k in vertical for k in ["health", "provider", "medical", "clinical", "care", "healthtech"])
-    is_healthcare = is_healthcare_payer or is_healthcare_general
-
+    # 5. Role adjustments
     if job:
-        title = job.title.lower()
+        title = (job.title or "").lower()
         rf = weights.get("role_fit_healthcare", {})
         revenue_bonus = rf.get("revenue_bonus", 10)
         reject_penalty = rf.get("reject_penalty", -35)
-
         if is_healthcare:
-            # Revenue-role ONLY gate for healthcare: penalize non-revenue, bonus revenue roles
-            if any(r in title for r in REJECT_ROLE_KEYWORDS):
-                breakdown["role_adjustment"] += reject_penalty
-            elif any(r in title for r in REVENUE_ROLE_KEYWORDS):
-                breakdown["role_adjustment"] += revenue_bonus
+            if any(r in title for r in REVENUE_ROLE_KEYWORDS):
+                breakdown["role_adjustment"] = revenue_bonus
+            # reject case already handled above
         else:
-            # Non-healthcare: existing seniority bonus and ops cap
             if any(k in title for k in ["vp", "director", "cro", "head", "strategic"]):
-                breakdown["role_adjustment"] += 10
+                breakdown["role_adjustment"] = 10
             ops_terms = ["operations", "enablement", "support", "admin", "specialist", "coordinator", "assistant"]
             if any(term in title for term in ops_terms) and not any(k in title for k in ["vp", "director", "head"]):
-                if (score + breakdown["role_adjustment"]) > 30:
-                    breakdown["role_adjustment"] = 30 - score
+                if base + breakdown["role_adjustment"] > 30:
+                    breakdown["role_adjustment"] = 30 - base
+    base += breakdown["role_adjustment"]
 
-    score += breakdown["role_adjustment"]
+    # 6. Recency as multiplier (not additive)
+    recency_mult = 1.0
+    if job:
+        r_mult = weights.get("recency_multiplier", {})
+        posted = job.date_posted or job.created_at
+        if posted:
+            hours_old = (datetime.utcnow() - posted).total_seconds() / 3600
+            if hours_old <= 24:
+                recency_mult = r_mult.get("lt_24h", 1.15)
+            elif hours_old <= 72:
+                recency_mult = r_mult.get("lt_72h", 1.10)
+            elif hours_old <= 168:
+                recency_mult = r_mult.get("lt_1w", 1.05)
+            elif hours_old <= 336:
+                recency_mult = r_mult.get("lt_2w", 1.0)
+            else:
+                recency_mult = r_mult.get("gt_2w", 0.85)
+    breakdown["recency_multiplier"] = recency_mult
+    breakdown["base_score"] = base
+    score = base * recency_mult
 
-    # 6. Global logo-based adjustments
-    if any(k in comp_name for k in ["gitlab", "deputy"]):
-        if score > 65:
-            breakdown["global_adjustment"] = 65 - score
-            score = 65
+    # 7. Global adjustments
+    if any(k in comp_name for k in ["gitlab", "deputy"]) and score > 65:
+        breakdown["global_adjustment"] = 65 - score
+        score = 65
 
-    final_val = max(0, min(100, int(score)))
+    final_val = max(0, min(100, int(round(score))))
     breakdown["final_score"] = final_val
 
     if return_breakdown:
@@ -185,3 +187,39 @@ def score_job_posting(company: Optional[Company], job: Job) -> int:
 
 def score_signal_lead(company: Company, signals: List[CompanySignal]) -> int:
     return score_lead(company, signals=signals)
+
+
+def score_candidate(company_name: str, vertical: str, context: str, weights: Optional[Dict[str, Any]] = None) -> int:
+    """
+    Score a discovery candidate from name/vertical/context only. No Company/Job/Signals.
+    Used by Agent 6 Stage 2 (Sieve). Returns 0–100; 0 if context implies non–revenue-role.
+    """
+    if not weights:
+        weights = load_weights()
+    text = f"{company_name} {vertical} {context}".lower()
+    if any(r in text for r in REJECT_ROLE_KEYWORDS):
+        return 0
+    v_weights = weights.get("vertical_fit", {})
+    vert_low = (vertical or "").lower()
+    ctx_low = (context or "").lower()
+    if any((k in vert_low) or (k in ctx_low) for k in ["payer", "plans", "managed care", "medicaid", "medicare", "benefits", "health plan"]):
+        base = v_weights.get("healthcare_payer", 70)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["health", "provider", "medical", "clinical", "care", "healthtech"]):
+        base = v_weights.get("healthcare_general", 50)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["fintech", "payments", "insurance", "banking", "billing"]):
+        base = v_weights.get("fintech", 30)
+    else:
+        base = v_weights.get("unaligned", 5)
+    base += weights.get("lead_type_bonus", {}).get("signal_only", 10)
+
+    # News-intent weighting: real GTM events float, passive mentions sink
+    INTENT_BONUS = {
+        "launch": 15, "expansion": 15, "new product": 20, "funding": 20, "series": 20,
+        "hiring": 10, "vp sales": 20, "cro": 25, "chief revenue": 25, "raised": 15, "raises": 15,
+    }
+    intent_score = 0
+    for k, v in INTENT_BONUS.items():
+        if k in ctx_low:
+            intent_score = max(intent_score, v)
+    base += intent_score
+    return max(0, min(100, int(base)))

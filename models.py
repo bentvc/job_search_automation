@@ -230,6 +230,30 @@ class CandidateGoldenLead(Base):
     source_outreach_id = Column(String(36), nullable=True)
     created_at = Column(DateTime, server_default=func.now())
 
+class DiscoveryCandidate(Base):
+    """Unvalidated companies from news. Lifecycle: discovered → scored | rejected → promoted (Stage 3 only)."""
+    __tablename__ = "discovery_candidates"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    company_name = Column(String(255), nullable=False, index=True)
+    context = Column(Text, nullable=True)  # headline/snippet; use as context_summary in Stage 2
+    source_url = Column(String(500), nullable=True)
+    source_query = Column(String(500), nullable=True)
+    prelim_vertical = Column(String(100), nullable=True)  # from cheap Stage-1 hint
+    preliminary_fit_score = Column(Integer, default=0)  # 0–100; refreshed in Stage 2 by score_candidate
+    discovery_rank = Column(Integer, nullable=True)       # 1=best from ranked extraction; used for ordering
+    discovery_score = Column(Integer, default=0)         # pre-sieve heuristic: Series/payer/employer boosts
+    canonical_company_name = Column(String(255), nullable=True)  # from Stage 1.5 entity resolution
+    entity_confidence = Column(Integer, nullable=True)   # 0–100; set by Stage 1.5; <70 → reject
+    status = Column(String(50), default="discovered", index=True)  # discovered → scored | rejected → promoted
+    rejected_reason = Column(String(255), nullable=True)
+
+    created_at = Column(DateTime, server_default=func.now())
+    scored_at = Column(DateTime, nullable=True)   # set when Stage 2 runs
+    promoted_at = Column(DateTime, nullable=True) # set when Stage 3 promotes
+    promoted_company_id = Column(String(36), ForeignKey("companies.id"), nullable=True)
+
+
 class OutboundEmail(Base):
     __tablename__ = 'outbound_emails'
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
