@@ -8,8 +8,10 @@ APOLLO_API_KEY = os.getenv('APOLLO_API_KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+GOOGLE_CSE_ID = os.getenv('GOOGLE_CSE_ID')
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 LUX_API_KEY = os.getenv('LUX_API_KEY')
+LUX_API_URL = os.getenv('LUX_API_URL')
 DEEPSEEK_API_KEY = os.getenv('DEEPSEEK_API_KEY')
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 MINIMAX_API_KEY = os.getenv('MINIMAX_API_KEY')
@@ -20,6 +22,13 @@ DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./data/job_search.db')
 # Pipeline Configuration
 USE_V2_PIPELINE = os.getenv('USE_V2_PIPELINE', 'true').lower() == 'true'  # DeepSeek → Perplexity
 ENABLE_EXPERIMENTAL_COUNCIL = os.getenv('ENABLE_EXPERIMENTAL_COUNCIL', 'false').lower() == 'true'  # Legacy multi-agent
+ENABLE_AI_CONTENT_DETECTION = os.getenv('ENABLE_AI_CONTENT_DETECTION', 'true').lower() == 'true'  # Detect and remove AI-generated content markers
+ENABLE_AGGRESSIVE_SCRAPING = os.getenv('ENABLE_AGGRESSIVE_SCRAPING', 'true').lower() == 'true'
+
+# Signal Monitor Throttles (safe-mode)
+SIGNAL_MONITOR_MAX_COMPANIES = os.getenv('SIGNAL_MONITOR_MAX_COMPANIES', '0')
+SIGNAL_MONITOR_MAX_SIGNALS_PER_COMPANY = os.getenv('SIGNAL_MONITOR_MAX_SIGNALS_PER_COMPANY', '0')
+SIGNAL_MONITOR_DISABLE_LLM = os.getenv('SIGNAL_MONITOR_DISABLE_LLM', 'false')
 
 # Default Models (Cost-Optimized Hierarchy)
 DEFAULT_OPENAI_MODEL = "gpt-4o"

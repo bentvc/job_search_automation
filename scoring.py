@@ -9,6 +9,19 @@ from models import Company, Job, CompanySignal
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Role-fit keywords for healthcare verticals (revenue-role ONLY)
+REVENUE_ROLE_KEYWORDS = [
+    "vp sales", "vp of sales", "svp sales", "chief revenue", "cro", "head of sales",
+    "director of sales", "head of growth", "vp revenue", "vp business development",
+    "strategic account", "enterprise account", "regional vice president",
+    "vp,", "director,", "head of", "head of revenue",
+]
+REJECT_ROLE_KEYWORDS = [
+    "sales ops", "sales operations", "enablement", "revops", "revenue operations",
+    "customer success", " csm", "implementation manager", "implementation consultant",
+    "support specialist", "sales admin", "operations coordinator",
+]
+
 def load_weights():
     config_path = os.path.join(os.path.dirname(__file__), 'config', 'scoring_weights.yaml')
     if os.path.exists(config_path):
@@ -18,7 +31,9 @@ def load_weights():
         "vertical_fit": {"healthcare_payer": 70, "healthcare_general": 50, "fintech": 30, "enterprise_gtm": 25, "generic_saas": 10, "unaligned": 5},
         "lead_type_bonus": {"job_posting": 20, "signal_only": 10},
         "location_bonus": {"colorado_radius": 15},
-        "signal_strength": {"funding": 20, "product_launch": 15, "leadership_change": 15, "hiring_spike": 10, "generic": 5}
+        "signal_strength": {"funding": 20, "product_launch": 15, "leadership_change": 15, "new_role_announcement": 22, "new_role_posting": 18, "hiring_spike": 10, "generic": 5},
+        "signal_strength_cap": 35,
+        "role_fit_healthcare": {"revenue_bonus": 10, "reject_penalty": -35},
     }
 
 def score_lead(company: Optional[Company], job: Optional[Job] = None, signals: Optional[List[CompanySignal]] = None, weights: Optional[Dict[str, Any]] = None, return_breakdown: bool = False) -> Any:
@@ -102,31 +117,52 @@ def score_lead(company: Optional[Company], job: Optional[Job] = None, signals: O
     # 4. Signal strength
     if signals:
         ss_weights = weights.get("signal_strength", {})
-        high_score = 0
+        bucket_scores: Dict[str, int] = {}
         for sig in signals:
             txt = sig.signal_text.lower()
-            if any(k in txt for k in ["funding", "raised", "round", "series"]):
-                high_score = max(high_score, ss_weights.get("funding", 20))
-            elif any(k in txt for k in ["launch", "product", "new"]):
-                high_score = max(high_score, ss_weights.get("product_launch", 15))
-            elif any(k in txt for k in ["cro", "ceo", "vp", "hire", "leader"]):
-                high_score = max(high_score, ss_weights.get("leadership_change", 15))
+            if "new role posting" in txt:
+                bucket_scores["new_role_posting"] = max(bucket_scores.get("new_role_posting", 0), ss_weights.get("new_role_posting", 18))
+            elif "new role announcement" in txt or "new role" in txt:
+                bucket_scores["new_role_announcement"] = max(bucket_scores.get("new_role_announcement", 0), ss_weights.get("new_role_announcement", 22))
+            elif any(k in txt for k in ["funding", "raised", "round", "series"]):
+                bucket_scores["funding"] = max(bucket_scores.get("funding", 0), ss_weights.get("funding", 20))
+            elif any(k in txt for k in ["launch", "product", "new product"]):
+                bucket_scores["product_launch"] = max(bucket_scores.get("product_launch", 0), ss_weights.get("product_launch", 15))
+            elif any(k in txt for k in ["cro", "ceo", "vp", "hire", "leader", "chief revenue", "chief commercial"]):
+                bucket_scores["leadership_change"] = max(bucket_scores.get("leadership_change", 0), ss_weights.get("leadership_change", 15))
             elif "hiring" in txt:
-                high_score = max(high_score, ss_weights.get("hiring_spike", 10))
-        breakdown["signal_score"] = high_score
-        score += high_score
+                bucket_scores["hiring_spike"] = max(bucket_scores.get("hiring_spike", 0), ss_weights.get("hiring_spike", 10))
+
+        total_signal = sum(bucket_scores.values())
+        cap = int(weights.get("signal_strength_cap", 35))
+        breakdown["signal_score"] = min(total_signal, cap)
+        score += breakdown["signal_score"]
 
     # 5. Role-specific adjustments
+    is_healthcare_payer = any(k in vertical for k in ["payer", "plans", "managed care", "medicaid", "medicare", "benefits", "health plan"])
+    is_healthcare_general = any(k in vertical for k in ["health", "provider", "medical", "clinical", "care", "healthtech"])
+    is_healthcare = is_healthcare_payer or is_healthcare_general
+
     if job:
         title = job.title.lower()
-        if any(k in title for k in ["vp", "director", "cro", "head", "strategic"]):
-            breakdown["role_adjustment"] += 10
-        
-        ops_terms = ["operations", "enablement", "support", "admin", "specialist", "coordinator", "assistant"]
-        if any(term in title for term in ops_terms) and not any(k in title for k in ["vp", "director", "head"]):
-            # This is a cap, not just a penalty
-            if (score + breakdown["role_adjustment"]) > 30:
-                breakdown["role_adjustment"] = 30 - score
+        rf = weights.get("role_fit_healthcare", {})
+        revenue_bonus = rf.get("revenue_bonus", 10)
+        reject_penalty = rf.get("reject_penalty", -35)
+
+        if is_healthcare:
+            # Revenue-role ONLY gate for healthcare: penalize non-revenue, bonus revenue roles
+            if any(r in title for r in REJECT_ROLE_KEYWORDS):
+                breakdown["role_adjustment"] += reject_penalty
+            elif any(r in title for r in REVENUE_ROLE_KEYWORDS):
+                breakdown["role_adjustment"] += revenue_bonus
+        else:
+            # Non-healthcare: existing seniority bonus and ops cap
+            if any(k in title for k in ["vp", "director", "cro", "head", "strategic"]):
+                breakdown["role_adjustment"] += 10
+            ops_terms = ["operations", "enablement", "support", "admin", "specialist", "coordinator", "assistant"]
+            if any(term in title for term in ops_terms) and not any(k in title for k in ["vp", "director", "head"]):
+                if (score + breakdown["role_adjustment"]) > 30:
+                    breakdown["role_adjustment"] = 30 - score
 
     score += breakdown["role_adjustment"]
 

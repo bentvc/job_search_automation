@@ -81,7 +81,7 @@ def discover_best_model(provider: str, api_key: str) -> str:
         logger.error(f"Discovery failed for {provider}: {e}")
         return None
 
-def call_llm(prompt: str, model: Optional[str] = None, response_format: Optional[str] = None, forced_provider: Optional[str] = None, enable_expensive: bool = False) -> str:
+def call_llm(prompt: str, model: Optional[str] = None, response_format: Optional[str] = None, forced_provider: Optional[str] = None, enable_expensive: bool = False, temperature: Optional[float] = None) -> str:
     """
     Robust LLM call with dynamic discovery, caching, and multi-provider failover.
     
@@ -133,11 +133,14 @@ def call_llm(prompt: str, model: Optional[str] = None, response_format: Optional
                     api_key=api_key,
                     base_url="https://api.minimax.io/anthropic"
                 )
-                message = client.messages.create(
-                    model=target_model,
-                    max_tokens=4000,
-                    messages=[{"role": "user", "content": prompt}]
-                )
+                args = {
+                    "model": target_model,
+                    "max_tokens": 4000,
+                    "messages": [{"role": "user", "content": prompt}]
+                }
+                if temperature is not None:
+                    args["temperature"] = temperature
+                message = client.messages.create(**args)
                 # Extract text blocks (skip thinking)
                 result = ""
                 for block in message.content:
@@ -151,11 +154,14 @@ def call_llm(prompt: str, model: Optional[str] = None, response_format: Optional
             # Anthropic (Native)
             elif provider_name == 'anthropic':
                 client = Anthropic(api_key=api_key)
-                message = client.messages.create(
-                    model=target_model,
-                    max_tokens=4000,
-                    messages=[{"role": "user", "content": prompt}]
-                )
+                args = {
+                    "model": target_model,
+                    "max_tokens": 4000,
+                    "messages": [{"role": "user", "content": prompt}]
+                }
+                if temperature is not None:
+                    args["temperature"] = temperature
+                message = client.messages.create(**args)
                 result = message.content[0].text
                 logger.info(f"✅ {provider_name} succeeded with {target_model}")
                 return result
@@ -167,6 +173,8 @@ def call_llm(prompt: str, model: Optional[str] = None, response_format: Optional
                     "model": target_model,
                     "messages": [{"role": "user", "content": prompt}],
                 }
+                if temperature is not None:
+                    args["temperature"] = temperature
                 if provider_name == 'openrouter':
                     args["extra_headers"] = {
                         "HTTP-Referer": "https://antigravity.ai",
@@ -231,7 +239,7 @@ def mock_council_response(prompt):
     return json.dumps({
         "insights": f"**Angle 1 (Strategist):** {angles[0]}\n\n**Angle 2 (Dealmaker):** {angles[3]}\n\n**Council Decision:** The Strategist's approach aligns better with their conservative hiring culture.",
         "outreach_angle": "Series B Scaling & Payer Process",
-        "draft_email": "Hi [Name],\n\nSaw the news about the Series B—congrats. Scaling payer sales post-raise is often where the friction starts.\n\nI've built this motion twice (0-$50M), specifically navigating the complex contracting at UHC and Aetna. Would love to share how we structured the 'Pilot-to-Enterprise' model to shorten cycles.\n\nOpen to a brief chat Thursday?\n\nBest,\nBent"
+        "draft_email": "Hi [Name],\n\nSaw the news about the Series B - congrats. Scaling payer sales post-raise is often where the friction starts.\n\nI've built this motion twice (0-$50M), specifically navigating the complex contracting at UHC and Aetna. Would love to share how we structured the 'Pilot-to-Enterprise' model to shorten cycles.\n\nOpen to a brief chat Thursday?\n\nBest,\nBent"
     })
 
 
@@ -247,5 +255,28 @@ def parse_json_from_llm(content: str) -> Dict[str, Any]:
         
         return json.loads(content)
     except Exception as e:
+        # Fallback: try to extract the first JSON object from mixed text
+        try:
+            def _extract_first_json_obj(text: str) -> Optional[str]:
+                start = text.find("{")
+                if start == -1:
+                    return None
+                depth = 0
+                for i in range(start, len(text)):
+                    ch = text[i]
+                    if ch == "{":
+                        depth += 1
+                    elif ch == "}":
+                        depth -= 1
+                        if depth == 0:
+                            return text[start:i + 1]
+                return None
+            
+            extracted = _extract_first_json_obj(content)
+            if extracted:
+                return json.loads(extracted)
+        except Exception as inner_e:
+            logger.error(f"Failed JSON fallback parse: {inner_e}. Content: {content}")
+        
         logger.error(f"Failed to parse JSON: {e}. Content: {content}")
         return {}

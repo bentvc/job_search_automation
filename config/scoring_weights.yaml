@@ -18,8 +18,11 @@ signal_strength:
   funding: 20
   product_launch: 15
   leadership_change: 15
+  new_role_announcement: 22
+  new_role_posting: 18
   hiring_spike: 10
   generic: 5
+signal_strength_cap: 35
 
 rejection_threshold: 40
 shortlist_threshold: 80
@@ -30,3 +33,8 @@ recency_bonus:
   lt_1w: 10
   lt_2w: 0
   gt_2w: -20
+
+# Role-fit for healthcare/payer (revenue-role ONLY gate)
+role_fit_healthcare:
+  revenue_bonus: 10   # VP Sales, CRO, Head of Sales, Director Sales, Strategic AE, etc.
+  reject_penalty: -35 # Sales Ops, Enablement, RevOps, CSM, Implementation Manager → pulls below shortlist
