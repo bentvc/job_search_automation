@@ -611,16 +611,31 @@ Return JSON: {{"include": bool, "fit_score": 0-100, "vertical": "string"}}"""
     return promoted
 
 
+def clear_discovery_candidates() -> int:
+    """Delete all rows from discovery_candidates. Returns count deleted. Use when table is polluted from earlier runs."""
+    db = SessionLocal()
+    try:
+        n = db.query(DiscoveryCandidate).delete()
+        db.commit()
+        logger.info(f"[Agent6] Cleared {n} discovery candidates.")
+        return n
+    finally:
+        db.close()
+
+
 def run_discovery(
     max_new_per_run: Optional[int] = None,
     run_gtm_scan: bool = True,
     max_articles_per_query: Optional[int] = None,
     sieve_threshold: Optional[int] = None,
     stage: Optional[int] = None,
+    clear: bool = False,
 ) -> None:
-    """Run full pipeline Stage1 → Stage2 → Stage3, or a single stage if stage=1|2|3."""
+    """Run full pipeline Stage1 → Stage2 → Stage3, or a single stage if stage=1|2|3. If clear=True, wipe discovery_candidates first."""
     from database import init_db
     init_db()  # ensure discovery_candidates table exists
+    if clear:
+        clear_discovery_candidates()
     start = time.time()
     if stage == 1:
         stage1_collect(max_articles_per_query=max_articles_per_query)
@@ -645,6 +660,7 @@ if __name__ == "__main__":
     p.add_argument("--no-gtm-scan", action="store_true", help="Skip GTM leadership gap scan in Stage 3")
     p.add_argument("--max-articles", type=int, default=None, help="Max articles per topic in Stage 1")
     p.add_argument("--sieve-threshold", type=int, default=None, help="Min preliminary_fit for Stage 3 (default from config)")
+    p.add_argument("--clear", action="store_true", help="Clear discovery_candidates table before running (use when polluted)")
     args = p.parse_args()
     run_discovery(
         max_new_per_run=args.max_new,
@@ -652,4 +668,5 @@ if __name__ == "__main__":
         max_articles_per_query=args.max_articles,
         sieve_threshold=args.sieve_threshold,
         stage=args.stage,
+        clear=args.clear,
     )
