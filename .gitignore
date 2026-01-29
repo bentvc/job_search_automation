@@ -1,6 +1,7 @@
 # Ignore environment files containing secrets
 .env
 .env.*
+!.env.template
 
 # Export marker (local state)
 .last_full_export

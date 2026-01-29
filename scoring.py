@@ -189,10 +189,17 @@ def score_signal_lead(company: Company, signals: List[CompanySignal]) -> int:
     return score_lead(company, signals=signals)
 
 
-def score_candidate(company_name: str, vertical: str, context: str, weights: Optional[Dict[str, Any]] = None) -> int:
+def score_candidate(
+    company_name: str,
+    vertical: str,
+    context: str,
+    weights: Optional[Dict[str, Any]] = None,
+    source_url: Optional[str] = None,
+) -> int:
     """
     Score a discovery candidate from name/vertical/context only. No Company/Job/Signals.
     Used by Agent 6 Stage 2 (Sieve). Returns 0–100; 0 if context implies non–revenue-role.
+    Optional source_url: if X/Twitter and context has GTM keywords (CRO, VP Sales, hiring, funding, series), add +15.
     """
     if not weights:
         weights = load_weights()
@@ -204,6 +211,24 @@ def score_candidate(company_name: str, vertical: str, context: str, weights: Opt
     ctx_low = (context or "").lower()
     if any((k in vert_low) or (k in ctx_low) for k in ["payer", "plans", "managed care", "medicaid", "medicare", "benefits", "health plan"]):
         base = v_weights.get("healthcare_payer", 70)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["rcm", "revenue cycle", "billing"]):
+        base = v_weights.get("healthcare_rcm", 65)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["physician group", "medical practice", "practice management"]):
+        base = v_weights.get("healthcare_physician_practice", 65)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["hospital", "health system", "idn"]):
+        base = v_weights.get("healthcare_hospital", 65)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["home health", "hospice", "post-acute"]):
+        base = v_weights.get("healthcare_home_health", 65)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["telehealth", "digital health", "virtual care"]):
+        base = v_weights.get("healthcare_telehealth", 65)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["behavioral health", "mental health", "addiction treatment"]):
+        base = v_weights.get("healthcare_behavioral", 65)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["biotech", "medical device", "diagnostics"]):
+        base = v_weights.get("healthcare_biotech_device", 55)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["specialty pharmacy", "pharmacy benefit"]):
+        base = v_weights.get("healthcare_pharmacy", 60)
+    elif any((k in vert_low) or (k in ctx_low) for k in ["lab", "diagnostics", "pathology"]):
+        base = v_weights.get("healthcare_lab", 60)
     elif any((k in vert_low) or (k in ctx_low) for k in ["health", "provider", "medical", "clinical", "care", "healthtech"]):
         base = v_weights.get("healthcare_general", 50)
     elif any((k in vert_low) or (k in ctx_low) for k in ["fintech", "payments", "insurance", "banking", "billing"]):
@@ -222,4 +247,12 @@ def score_candidate(company_name: str, vertical: str, context: str, weights: Opt
         if k in ctx_low:
             intent_score = max(intent_score, v)
     base += intent_score
+
+    # X (Twitter) source bonus: +35 when signal is from X and context has GTM keywords (CRO/VP Sales/hiring/funding)
+    x_source_url = (source_url or "").lower()
+    if ("x.com" in x_source_url or "twitter.com" in x_source_url or "twitter" in x_source_url) and any(
+        g in ctx_low for g in ["cro", "vp sales", "hiring", "funding", "series", "chief revenue", "raised", "raises"]
+    ):
+        base += 35
+        logger.info(f"X signal bonus +35 for {company_name} (score now {base})")
     return max(0, min(100, int(base)))

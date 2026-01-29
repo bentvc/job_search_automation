@@ -1,6 +1,16 @@
 # Scoring Weights Configuration
 vertical_fit:
   healthcare_payer: 70
+  # High-signal healthtech sub-verticals (RCM, physician, home health, telehealth, etc.)
+  healthcare_rcm: 65
+  healthcare_physician_practice: 65
+  healthcare_hospital: 65
+  healthcare_home_health: 65
+  healthcare_telehealth: 65
+  healthcare_behavioral: 65
+  healthcare_biotech_device: 55
+  healthcare_pharmacy: 60
+  healthcare_lab: 60
   healthcare_general: 50
   fintech: 30
   enterprise_gtm: 25

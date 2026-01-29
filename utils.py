@@ -7,6 +7,9 @@ from anthropic import Anthropic
 import requests
 import config
 
+import re
+import config
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -248,6 +251,9 @@ def parse_json_from_llm(content: str) -> Dict[str, Any]:
     Attempts to parse JSON from LLM response, handling markdown blocks if present.
     """
     try:
+        # Safety: strip <think> tags if leaked (DeepSeek R1)
+        content = re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL).strip()
+
         if "```json" in content:
             content = content.split("```json")[-1].split("```")[0].strip()
         elif "```" in content:

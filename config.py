@@ -40,8 +40,8 @@ NEWS_DISCOVERY_QUERIES = [
 NEWS_DISCOVERY_MAX_ARTICLES_PER_QUERY = int(os.getenv('NEWS_DISCOVERY_MAX_ARTICLES_PER_QUERY', '10'))
 NEWS_DISCOVERY_MAX_NEW_COMPANIES_PER_RUN = int(os.getenv('NEWS_DISCOVERY_MAX_NEW_COMPANIES_PER_RUN', '20'))
 NEWS_DISCOVERY_DISABLE_LLM = os.getenv('NEWS_DISCOVERY_DISABLE_LLM', 'false').strip().lower() == 'true'
-# Sieve: only enrich candidates with preliminary_fit_score >= this (Stage 3 "Investor")
-NEWS_DISCOVERY_SIEVE_THRESHOLD = int(os.getenv('NEWS_DISCOVERY_SIEVE_THRESHOLD', '80'))
+# Sieve: only enrich candidates with preliminary_fit_score >= this (Stage 3 "Investor"). Default 55 to capture more near-misses.
+NEWS_DISCOVERY_SIEVE_THRESHOLD = int(os.getenv('NEWS_DISCOVERY_SIEVE_THRESHOLD', '55'))
 
 # Default Models (Cost-Optimized Hierarchy)
 DEFAULT_OPENAI_MODEL = "gpt-4o"

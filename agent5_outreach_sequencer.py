@@ -88,6 +88,32 @@ class OutreachSequencerAgent:
         Stage: Follow-up #{stage}.
         Recipient Role: {contact.role_type}.
         
+        CONSULTATIVE TONE:
+        - Keep it brief and curious, not pushy
+        - Ask a single question that invites response: "Does this timing work?" "Worth a quick chat?"
+        - Avoid prescriptive language ("you should," "you need to")
+        - Show value through specific insight, not generic follow-up
+        - Avoid startup or VC metaphors and abstraction phrases. Use plain operational language.
+        - Do NOT reference job postings, role descriptions, or hiring language.
+        - Include at most ONE question in the body.
+        - Do NOT use contrastive constructions ("not X but Y", "less/more", "wasn't X - it was Y").
+
+        GOLD EXAMPLE (style and structure only; do not copy facts unless provided):
+        Subject: Thoughts on scaling US sales post your Series B
+
+        Hi,
+
+        Congrats on the $65M Series B in October. Having followed Heidi's growth from Australia to powering 10M+ consults monthly, my read is that the US expansion hinges on translating a strong enterprise sales motion from a relatively unified system like the NHS into a market where care delivery models, clinical workflows, and contracting structures vary widely across providers and payers. Am I reading that right?
+
+        In similar US expansions I've worked on, the friction showed up in mapping a single product narrative across very different clinical environments and risk-based contracts without fragmenting the sales motion or over-customizing. I've led teams closing 7-figure Medicaid and Medicare Advantage deals where that translation work often determined whether pilots turned into durable, multi-year revenue.
+
+        If that's the problem space you're navigating, I'm happy to share what proved durable in those ramps.
+        
+        WRITING MECHANICS:
+        - Use ONLY standard punctuation: periods, commas, regular hyphens (-), question marks
+        - NEVER use em dashes (—) or en dashes (–)
+        - Write naturally, use contractions (I've, we've, that's)
+        
         Return JSON structure:
         {{
           "draft_email": "Short, persistent but professional follow-up",
@@ -96,11 +122,14 @@ class OutreachSequencerAgent:
         """
         
         try:
-            resp = call_llm(prompt, response_format="json")
+            resp = call_llm(prompt, response_format="json", temperature=0.25)
             analysis = parse_json_from_llm(resp)
             if not isinstance(analysis, dict):
                 logger.error(f"Invalid LLM response format: {analysis}")
                 return
+            if analysis.get("draft_email"):
+                from utils.email_safety import sanitize_email_text
+                analysis["draft_email"] = sanitize_email_text(analysis["draft_email"])
 
             outreach = ProactiveOutreach(
                 id=str(uuid.uuid4()),

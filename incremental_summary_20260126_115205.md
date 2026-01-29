@@ -1,15 +1,27 @@
+# Codebase Summary (Incremental)
+Date: 2026-01-26 11:52:05
+Changes since: 2026-01-26 11:47:41
+
+Project Structure:
+====================
+job_search_automation/
+  ui_streamlit.py
+
+========================================
+
+## File: ui_streamlit.py
+```py
 import streamlit as st
 import logging
 logger = logging.getLogger(__name__)
 from streamlit_autorefresh import st_autorefresh
 from database import SessionLocal, get_last_outbound_email
-from models import ProactiveOutreach, Company, Contact, Job, GoldenLead, CandidateGoldenLead, CompanySignal, OutboundEmail, Tenant, JobTenant
+from models import ProactiveOutreach, Company, Contact, Job, GoldenLead, CandidateGoldenLead, CompanySignal, OutboundEmail
 from datetime import datetime, timedelta
 import urllib.parse
 import uuid
 import re
 from mailgun_client import send_email_via_mailgun, choose_sender_address, SENDER_ADDRESSES, send_mailgun_test_email
-from sqlalchemy import or_
 from apollo_client import (
     ApolloClient,
     find_contacts_for_lead,
@@ -25,7 +37,7 @@ import time
 from pipeline_v2 import deepseek_analyze_and_draft, perplexity_finalize, run_v2_pipeline
 import config
 from scoring import score_lead
-from utils.email_safety import sanitize_email_text, validate_send_safe, detect_ai_content_markers
+from utils.email_safety import sanitize_email_text, validate_send_safe
 
 st.set_page_config(layout="wide", page_title="Job Search Cockpit")
 import pandas as pd
@@ -239,45 +251,20 @@ def run_full_v2_pipeline(outreach, company, contact, job, session):
 def get_session():
     return SessionLocal()
 
-def get_company_outbound_history(session, company_id, company_name):
+def get_company_contact_history(session, company_id):
     """
-    Returns prior outbound emails for a company (primary only),
-    even if there is no matching Contact.email saved.
-    Also includes records from same-name company variants.
+    Returns all contacts that have been emailed at this company,
+    regardless of which outreach they were contacted on.
     """
-    company_name = (company_name or "").strip()
-    conditions = [ProactiveOutreach.company_id == company_id]
-    if company_name:
-        conditions.append(Company.name.ilike(f"%{company_name}%"))
-    rows = (
-        session.query(OutboundEmail, ProactiveOutreach, Company)
+    return (
+        session.query(Contact)
+        .filter(Contact.email.isnot(None))  # Only contacts with email addresses
+        .join(OutboundEmail, OutboundEmail.recipient_email == Contact.email)
         .join(ProactiveOutreach, ProactiveOutreach.id == OutboundEmail.outreach_id)
-        .join(Company, Company.id == ProactiveOutreach.company_id)
-        .filter(OutboundEmail.email_type == 'primary')
-        .filter(or_(*conditions))
-        .order_by(OutboundEmail.created_at.desc())
-        .limit(25)
+        .filter(ProactiveOutreach.company_id == company_id)
+        .distinct()
         .all()
     )
-
-    # Try to match each outbound email to a Contact by email (best-effort)
-    items = []
-    for oe, po, co in rows:
-        matched = None
-        if oe.recipient_email:
-            matched = (
-                session.query(Contact)
-                .filter(Contact.company_id == company_id)
-                .filter(Contact.email == oe.recipient_email)
-                .first()
-            )
-        items.append({
-            "outbound": oe,
-            "outreach": po,
-            "company": co,
-            "contact": matched,   # may be None
-        })
-    return items
 
 def get_queue(session, filter_types=None):
     query = session.query(ProactiveOutreach).filter(
@@ -290,9 +277,10 @@ def get_queue(session, filter_types=None):
     if filter_types:
         filtered = []
         for i in items:
-            # Exclude sent if Hide Sent is checked
-            if 'Hide Sent' in filter_types and i.status == 'sent':
-                continue
+            # Exclude sent if Hide Sent is checked, UNLESS it's the currently active one
+            if 'Hide Sent' in filter_types and i.status == 'sent': 
+                if st.session_state.get("active_outreach_id") != i.id:
+                    continue
             
             if 'Job Applications' in filter_types and 'job' in i.outreach_type: filtered.append(i)
             elif 'Signal Outreaches' in filter_types and 'signal' in i.outreach_type: filtered.append(i)
@@ -307,15 +295,6 @@ def get_queue(session, filter_types=None):
         
     return sorted(items, key=sort_key)
 
-def normalize_company_key(name: str) -> str:
-    if not name:
-        return ""
-    key = name.lower().strip()
-    # Remove common suffixes to strengthen dedup (e.g., "Health", "Inc", "LLC")
-    key = re.sub(r"\b(inc|inc\.|llc|ltd|corp|co|company|health|healthcare|group|systems)\b", "", key)
-    key = re.sub(r"[^a-z0-9]+", "", key)
-    return key
-
 # --- MAIN UI ---
 def main():
     # Increase refresh to 5 mins so it doesn't kill long-running LLM calls
@@ -323,24 +302,6 @@ def main():
     session = get_session()
 
     with st.sidebar:
-        st.markdown("### 👤 Viewing as")
-        tenants = session.query(Tenant).order_by(Tenant.name).all()
-        tenant_options = {t.name: t.id for t in tenants}
-        if not tenant_options:
-            st.caption("Run _migrate_multitenant.py_ first.")
-            current_tenant_id = None
-        else:
-            names = list(tenant_options.keys())
-            default_idx = 0
-            if "tenant_id" in st.session_state and st.session_state["tenant_id"] in tenant_options.values():
-                for i, n in enumerate(names):
-                    if tenant_options[n] == st.session_state["tenant_id"]:
-                        default_idx = i
-                        break
-            chosen = st.selectbox("Tenant", names, index=default_idx, label_visibility="collapsed")
-            current_tenant_id = tenant_options[chosen]
-            st.session_state["tenant_id"] = current_tenant_id
-        st.markdown("---")
         st.markdown("### 📦 Export Codebase")
         st.caption("💡 Click ⬅️ to collapse sidebar")
         st.markdown("---")
@@ -431,11 +392,6 @@ def main():
 
         st.markdown("---")
         st.subheader("🛠️ Maintenance")
-        if st.button("🔄 Sync jobs to tenants", use_container_width=True, help="Backfill JobTenant for all scored/shortlisted jobs so My Shortlist works for each tenant."):
-            from sync_job_tenant import sync_job_tenant
-            n = sync_job_tenant()
-            st.toast(f"Synced {n} job–tenant rows.", icon="🔄")
-            st.rerun()
         if st.button("🔄 Rescore Production Leads"):
             import subprocess
             subprocess.run(["python3", "scripts/rescore_production_leads.py"])
@@ -454,7 +410,7 @@ def main():
                     status.update(label="❌ Test failed", state="error")
                     st.error(result.get("error"))
 
-    tab_cockpit, tab_shortlist, tab_test = st.tabs(["🚀 Cockpit", "📋 My Shortlist", "🧪 Test Scoring"])
+    tab_cockpit, tab_test = st.tabs(["🚀 Cockpit", "🧪 Test Scoring"])
 
     with tab_cockpit:
         col_queue, col_editor, col_insights = st.columns([1, 2, 1], gap="small")
@@ -499,9 +455,9 @@ def main():
                     db_company_names = set()
                     for i in db_items:
                         if i.company and i.company.name:
-                            db_company_names.add(normalize_company_key(i.company.name))
+                            db_company_names.add(i.company.name)
                     
-                    missing_names = [n for n in golden_names if normalize_company_key(n) not in db_company_names]
+                    missing_names = [n for n in golden_names if n not in db_company_names]
                     
                     # 4. Create Ghost Items for Missing
                     from types import SimpleNamespace
@@ -535,10 +491,8 @@ def main():
                 # Deduplicate by Company
                 grouped_items = {}
                 for item in queue_items:
-                    company_name = item.company.name if item.company else "Unknown"
-                    cid = normalize_company_key(company_name) or (item.company_id or company_name)
-                    if cid not in grouped_items:
-                        grouped_items[cid] = []
+                    cid = item.company_id or item.company.name # Fallback to name if ID missing (rare)
+                    if cid not in grouped_items: grouped_items[cid] = []
                     grouped_items[cid].append(item)
                 
                 options_list = []
@@ -693,7 +647,8 @@ def main():
                 st.subheader("🕵️ Contact Finder")
                 st.caption(f"Outreach ID: {outreach.id[:8]}")
                 
-                # --- CONTACT FINDER: AUTHORITATIVE CONTACT (DB) ---
+                # --- CONTACT FINDER: AUTHORITATIVE RENDER LOGIC ---
+                # Step 1: Load DB-authoritative contact
                 assigned_contact = None
                 if outreach.contact_id:
                     assigned_contact = (
@@ -701,438 +656,247 @@ def main():
                         .filter(Contact.id == outreach.contact_id)
                         .first()
                     )
-
-                # Best-effort email resolution for assigned contact
-                assigned_email = None
-                assigned_email_status = None
-                if assigned_contact:
-                    assigned_email = assigned_contact.email
-
-                    # If no DB email, attempt enrichment cache
-                    if (not assigned_email) and assigned_contact.apollo_id:
-                        cached = get_enriched_data(assigned_contact.apollo_id)
-                        if cached:
-                            e = cached.get("email")
-                            if e and "email_not_unlocked" not in e:
-                                assigned_email = e
-                                assigned_email_status = cached.get("email_status")
-                            elif not assigned_email:
-                                p = cached.get("personal_emails") or []
-                                if isinstance(p, list) and p:
-                                    assigned_email = p[0]
-                                    assigned_email_status = cached.get("email_status")
-
-                # Outbound check: did we ever email this person (by resolved email)?
-                sent_primary = None
-                check_email = assigned_email or (assigned_contact.email if assigned_contact else None) or effective_email
-                if check_email:
-                    sent_primary = get_last_outbound_email(check_email, company.name)
                 
-                show_debug = st.checkbox(
-                    "Show debug",
-                    value=False,
-                    help="Show internal IDs/state for troubleshooting.",
-                    key=f"show_debug_{outreach.id}",
-                )
-                if show_debug:
-                    st.caption(f"DEBUG contact_id={outreach.contact_id} status={outreach.status}")
-                    if assigned_contact:
-                        st.caption(f"DEBUG assigned_contact.name={assigned_contact.name} assigned_contact.email={assigned_contact.email}")
+                # Step 2: Load inferred candidate (optional, secondary)
+                # Only infer if no assigned contact exists
+                candidate_contact = None
+                if not assigned_contact:
+                    # Try to infer from search results (first result if available)
+                    found_contacts = st.session_state.get(f"contacts_{outreach.id}", [])
+                    if found_contacts:
+                        # Use first search result as candidate
+                        c = found_contacts[0]
+                        # Create a simple dict representation for candidate
+                        candidate_contact = {
+                            'name': c.get('name', 'Unknown'),
+                            'title': c.get('title', ''),
+                            'email': c.get('email'),
+                            'email_verified': c.get('email_status') == 'verified' if c.get('email_status') else False,
+                            'apollo_id': c.get('apollo_id'),
+                            'linkedin_url': c.get('linkedin_url')
+                        }
                 
-                # --- RENDER: ASSIGNED CONTACT (AUTHORITATIVE) ---
+                # Step 3: Render Contact Finder (STRICT order)
                 if assigned_contact:
                     st.markdown(f"**Assigned:** {assigned_contact.name}")
-
+                    
+                    # Compute enriched email for assigned contact (if needed)
+                    assigned_email = assigned_contact.email
+                    if not assigned_email and assigned_contact.apollo_id:
+                        # Try to get from enrichment cache
+                        cached = get_enriched_data(assigned_contact.apollo_id)
+                        if cached:
+                            e = cached.get('email')
+                            if e and "email_not_unlocked" not in e:
+                                assigned_email = e
+                            elif not assigned_email:
+                                p_emails = cached.get('personal_emails', [])
+                                if p_emails and isinstance(p_emails, list):
+                                    assigned_email = p_emails[0]
+                    
+                    # Check if email was sent
+                    sent_primary = None
+                    check_email = assigned_contact.email or assigned_email or effective_email
+                    if check_email:
+                        sent_primary = get_last_outbound_email(check_email, company.name)
+                    
                     if outreach.status == "sent":
                         st.success("✉️ Email sent")
                     else:
                         st.info("📌 Assigned contact")
-
-                    if assigned_email:
-                        st.markdown(f"📧 {assigned_email}")
-                        if assigned_email_status == "verified":
-                            st.caption("✅ Verified (cache)")
-                        elif assigned_contact.email:
-                            st.caption("⚠️ Unverified (DB)")
+                    
+                    # Email display with state-specific messages
+                    display_email = assigned_contact.email or assigned_email
+                    if display_email:
+                        st.markdown(f"📧 {display_email}")
+                        # Check if verified (from enrichment cache)
+                        if assigned_contact.apollo_id:
+                            cached = get_enriched_data(assigned_contact.apollo_id)
+                            if cached and cached.get('email_status') == 'verified':
+                                st.caption("✅ Verified email")
+                            else:
+                                st.caption("⚠️ Unverified email")
                         else:
-                            st.caption("⚠️ Unverified (cache)")
+                            st.caption("⚠️ Unverified email")
                     elif sent_primary:
+                        # Email was sent but not in DB record
                         st.caption("📨 Email previously sent (address on file)")
                     else:
+                        # State-specific messaging
                         if assigned_contact.apollo_id:
                             st.caption("🔍 Email not unlocked yet (Apollo enrichment available)")
                         else:
                             st.caption("📭 No email stored for this contact")
-
+                    
+                    # Show sent email details if available
                     if sent_primary:
                         with st.expander("View Last Email", expanded=False):
                             st.caption(f"**Subject:** {sent_primary['subject']}")
                             st.caption(f"**Ref:** {sent_primary['mailgun_message_id']}")
                             st.text(sent_primary['body_text'])
                     
-                    # Quick enrichment for assigned contact (by name)
-                    with st.expander("Email enrichment", expanded=False):
-                        st.caption(
-                            "Link the Apollo profile first. If email stays unavailable, use Unlock, then Reveal as a fallback."
-                        )
-                        if st.button(
-                            "🔎 Link Apollo profile (name match)",
-                            help="Find the closest Apollo profile for this person at this company (may not include email).",
-                            key=f"enrich_assigned_{outreach.id}",
-                            use_container_width=True,
-                        ):
-                            try:
-                                apollo = ApolloClient()
-                                dom = None
-                                try:
-                                    orgs = apollo.search_organizations(company.name)
-                                    if orgs:
-                                        dom = orgs[0].get('primary_domain') or orgs[0].get('domain')
-                                except Exception:
-                                    dom = None
-                                
-                                matches = apollo.enrich_person_by_name(
-                                    assigned_contact.name,
-                                    company_domain=dom,
-                                    company_name=company.name
-                                )
-                                
-                                if matches:
-                                    best = matches[0]
-                                    best_email = best.get('email')
-                                    if best_email and "email_not_unlocked" in best_email:
-                                        best_email = None
-
-                                    assigned_contact.apollo_id = best.get('id') or assigned_contact.apollo_id
-                                    assigned_contact.title = best.get('title') or assigned_contact.title
-                                    assigned_contact.email = best_email or assigned_contact.email
-                                    assigned_contact.linkedin_url = best.get('linkedin_url') or assigned_contact.linkedin_url
-                                    session.add(assigned_contact)
-                                    session.commit()
-                                    
-                                    # Save to cache for consistent UI
-                                    if best.get('id'):
-                                        save_enrichment_cache(best['id'], best)
-
-                                    if best_email:
-                                        st.success("Apollo profile linked and email saved.")
-                                    else:
-                                        st.info("Apollo profile linked, but email is still locked/unavailable.")
-                                    time.sleep(0.5)
-                                    st.rerun()
-                                else:
-                                    st.info("No Apollo match found for assigned contact.")
-                            except Exception as e:
-                                st.error(f"Apollo enrich failed: {e}")
-                        
-                        # Unlock/reveal email if we have an Apollo ID
-                        if assigned_contact.apollo_id:
-                            c_unlock, c_reveal = st.columns(2)
-                            with c_unlock:
-                                if st.button(
-                                    "🔄 Unlock email (1 credit)",
-                                    help="Requests the person profile by Apollo ID; returns email if available after unlock.",
-                                    key=f"unlock_assigned_{outreach.id}",
-                                    use_container_width=True,
-                                ):
-                                    try:
-                                        client = ApolloClient()
-                                        enriched_wrapper = client.unlock_person_email(assigned_contact.apollo_id)
-                                        enriched = enriched_wrapper.get('parsed_person')
-                                        if enriched:
-                                            save_enrichment_cache(assigned_contact.apollo_id, enriched)
-                                            new_email = enriched.get('email')
-                                            if new_email and "email_not_unlocked" not in new_email:
-                                                assigned_contact.email = new_email
-                                                assigned_contact.title = enriched.get('title') or assigned_contact.title
-                                                assigned_contact.linkedin_url = enriched.get('linkedin_url') or assigned_contact.linkedin_url
-                                                session.add(assigned_contact)
-                                                session.commit()
-                                                st.success("Email unlocked and saved.")
-                                            else:
-                                                st.info("Unlocked profile, but email still unavailable.")
-                                        else:
-                                            st.error(f"Unlock failed: HTTP {enriched_wrapper.get('http_status')}")
-                                        time.sleep(0.5)
-                                        st.rerun()
-                                    except Exception as e:
-                                        st.error(f"Unlock failed: {e}")
-                            with c_reveal:
-                                if st.button(
-                                    "🔓 Reveal email (1 credit)",
-                                    help="Force-reveals email via Apollo bulk match; use if Unlock returns no email.",
-                                    key=f"reveal_assigned_{outreach.id}",
-                                    use_container_width=True,
-                                ):
-                                    try:
-                                        client = ApolloClient()
-                                        revealed_wrapper = client.reveal_person_email(assigned_contact.apollo_id)
-                                        revealed = revealed_wrapper.get('parsed_person')
-                                        real_email = None
-                                        if revealed:
-                                            e = revealed.get('email')
-                                            if e and "email_not_unlocked" not in e:
-                                                real_email = e
-                                            if not real_email:
-                                                p_emails = revealed.get('personal_emails', [])
-                                                if p_emails and isinstance(p_emails, list):
-                                                    real_email = p_emails[0]
-                                        if real_email:
-                                            assigned_contact.email = real_email
-                                            assigned_contact.title = revealed.get('title') or assigned_contact.title
-                                            assigned_contact.linkedin_url = revealed.get('linkedin_url') or assigned_contact.linkedin_url
-                                            session.add(assigned_contact)
-                                            session.commit()
-                                            save_enrichment_cache(assigned_contact.apollo_id, revealed)
-                                            st.success("Email revealed and saved.")
-                                        else:
-                                            st.info("Reveal completed but no email returned.")
-                                        time.sleep(0.5)
-                                        st.rerun()
-                                    except Exception as e:
-                                        st.error(f"Reveal failed: {e}")
-                        else:
-                            st.info("To unlock/reveal, first link an Apollo profile (name match).")
+                    # OPTIONAL: Show candidate contact if both exist
+                    if candidate_contact:
+                        st.divider()
+                        st.caption("Other possible contacts:")
+                        st.markdown(f"- {candidate_contact['name']} (not assigned)")
+                    
+                elif candidate_contact:
+                    st.markdown(f"**Suggested:** {candidate_contact['name']}")
+                    
+                    if candidate_contact.get('email'):
+                        st.markdown(f"📧 {candidate_contact['email']}")
+                        st.caption("⚠️ Unverified email (candidate)")
+                    else:
+                        st.caption("❌ No email found for this candidate")
+                    
                 else:
-                    st.warning("No contact assigned")
-                    st.caption("Use search below to find and assign one.")
-
-                # --- OUTBOUND-FIRST COMPANY HISTORY (shows Steven even if Contact.email missing) ---
-                history = get_company_outbound_history(session, company.id, company.name)
-
-                # Remove entries that match currently assigned email (avoid duplication)
-                if assigned_email:
-                    history = [h for h in history if (h["outbound"].recipient_email != assigned_email)]
-
-                if history:
+                    st.caption("No contact identified yet")
+                
+                # --- COMPANY CONTACT HISTORY ---
+                prior_contacts = get_company_contact_history(session, company.id)
+                
+                # Remove the currently assigned contact to avoid duplication
+                if assigned_contact:
+                    prior_contacts = [
+                        c for c in prior_contacts if c.id != assigned_contact.id
+                    ]
+                
+                if prior_contacts:
                     st.divider()
-                    st.caption("Previously emailed at this company (primary):")
-
-                    for h in history:
-                        oe = h["outbound"]
-                        c = h["contact"]
-                        co = h.get("company")
-
-                        # Display label
-                        who = c.name if c and c.name else "(name not saved)"
-                        title = c.title if c and c.title else ""
-                        st.markdown(f"**{who}** {('— ' + title) if title else ''}")
-                        if co and co.name and co.name != company.name:
-                            st.caption(f"🏢 From {co.name}")
-                        st.caption(f"📧 {oe.recipient_email}")
-                        st.caption(f"✉️ Sent {oe.created_at.strftime('%b %d')} • Subject: {oe.subject[:60]}")
+                    st.caption("Previously contacted at this company:")
+                    
+                    for pc in prior_contacts:
+                        st.markdown(f"**{pc.name}** — {pc.title or 'Unknown role'}")
+                        if pc.email:
+                            st.caption(f"📧 {pc.email}")
+                        else:
+                            st.caption("📨 Email sent (address not stored)")
                         
-                        # If no Contact row exists, allow name/title capture before reassign
-                        capture_name = None
-                        capture_title = None
-                        if not c:
-                            capture_name = st.text_input(
-                                "Name for this email (optional)",
-                                key=f"hist_name_{oe.id}_{outreach.id}"
-                            ).strip()
-                            capture_title = st.text_input(
-                                "Title (optional)",
-                                key=f"hist_title_{oe.id}_{outreach.id}"
-                            ).strip()
-
-                        # Reassign behavior:
-                        # - If a matching Contact exists, use it.
-                        # - Else create a minimal Contact with the outbound email, then assign.
-                        if st.button(f"Reassign to {oe.recipient_email}", key=f"reassign_{oe.id}_{outreach.id}", use_container_width=True):
-                            if c:
-                                outreach.contact_id = c.id
-                            else:
-                                new_c = Contact(
-                                    id=str(uuid.uuid4()),
-                                    company_id=company.id,
-                                    name=capture_name or "(from prior outbound)",
-                                    title=capture_title or "",
-                                    email=oe.recipient_email,
-                                    apollo_id=None
-                                )
-                                session.add(new_c)
-                                session.commit()
-                                outreach.contact_id = new_c.id
-
+                        # Last email metadata
+                        last = get_last_outbound_email(pc.email, company.name) if pc.email else None
+                        if last:
+                            st.caption(
+                                f"✉️ Sent {last['created_at'].strftime('%b %d')} • "
+                                f"Subject: {last['subject'][:40]}..."
+                            )
+                        
+                        if st.button(
+                            f"Reassign to {pc.name}",
+                            key=f"reassign_{pc.id}_{outreach.id}",
+                            use_container_width=True
+                        ):
+                            outreach.contact_id = pc.id
                             session.add(outreach)
                             session.commit()
-
-                            # Hard reset editor state to avoid stale greeting/email
+                            
+                            # Hard reset editor state
                             st.session_state.pop(f"draft_text_{outreach.id}", None)
                             st.session_state.pop("recipient_email", None)
                             st.session_state.pop("recipient_name", None)
-
-                            st.success("Reassigned")
+                            
+                            st.success(f"Reassigned to {pc.name}")
                             time.sleep(0.5)
                             st.rerun()
                 
                 st.divider()
                 
                 st.caption(f"Target: {company.name}")
-
+                
                 default_role = "Head of Sales, VP Sales, Chief Revenue Officer"
-                target_role = st.text_input(
-                    "Role Keywords",
-                    value=default_role,
-                    help="Comma-separated titles used to rank results (e.g., 'VP Sales, CRO').",
-                )
-
-                with st.expander("Find contacts", expanded=(assigned_contact is None)):
-                    allow_research_when_assigned = True
-                    if assigned_contact:
-                        allow_research_when_assigned = st.checkbox(
-                            "Allow researching other contacts (won’t change assignment)",
-                            value=False,
-                            help="Useful if the assigned person has no email or you want alternates.",
-                            key=f"allow_research_when_assigned_{outreach.id}",
-                        )
-
-                    method = st.radio(
-                        "Search method",
-                        options=[
-                            "Apollo (targeted)",
-                            "Apollo (broad)",
-                            "AI (Perplexity)",
-                            "AI + Apollo enrich",
-                        ],
-                        help="Pick a strategy. Apollo is best when org resolution works; AI helps when Apollo can’t find the org.",
-                        key=f"contact_search_method_{outreach.id}",
-                    )
-
-                    if method == "Apollo (targeted)":
-                        st.caption("Apollo org → people search, ranked by your Role Keywords. AI fallback if org resolution fails.")
-                    elif method == "Apollo (broad)":
-                        st.caption("Apollo org → broad seniority search (Sales/Growth/CEO). AI fallback if org resolution fails.")
-                    elif method == "AI (Perplexity)":
-                        st.caption("Gets names/titles from AI. May not include emails; use Apollo enrichment after selecting.")
-                    else:
-                        st.caption("AI finds names, then we try to match/enrich each via Apollo to pull email when possible.")
-
-                    disabled = bool(assigned_contact) and not allow_research_when_assigned
-                    if st.button(
-                        "Run search",
-                        type="primary",
-                        use_container_width=True,
-                        disabled=disabled,
-                        help="Runs the selected search method and populates results below.",
-                        key=f"run_contact_search_{outreach.id}",
-                    ):
-                        if disabled:
-                            st.warning("Enable 'Allow researching other contacts' to run searches while a contact is assigned.")
-                        else:
-                            st.session_state.pop(f"contacts_{outreach.id}", None)
-                            with st.status("Searching...", expanded=True) as status:
-                                try:
-                                    if method == "Apollo (targeted)":
-                                        contacts, debug_info = find_contacts_for_lead(company.name, target_role, limit=3)
-                                        st.session_state[f"contacts_{outreach.id}"] = contacts
-                                        st.session_state[f"apollo_debug_{outreach.id}"] = debug_info
-                                        if contacts:
-                                            status.update(label=f"✅ Found {len(contacts)} contacts!", state="complete")
-                                        else:
-                                            identifier = debug_info.get('resolved_domain') or f"OrgID {debug_info.get('resolved_org_id')}"
-                                            status.update(label=f"❌ No contacts at {identifier}", state="error")
-                                            if debug_info.get("error") and "domain resolution failed" in debug_info.get("error").lower():
-                                                status.write("🤖 Apollo failed to resolve org. Falling back to AI research...")
-                                                ai_contacts = find_contacts_via_perplexity(company.name, target_role)
-                                                normalized = [{
-                                                    "name": c.get("name"),
-                                                    "title": c.get("title"),
-                                                    "email": c.get("email"),
-                                                    "linkedin_url": c.get("linkedin_url"),
-                                                    "source": "perplexity_ai",
-                                                    "reason": c.get("reason"),
-                                                } for c in (ai_contacts or [])]
-                                                if normalized:
-                                                    st.session_state[f"contacts_{outreach.id}"] = normalized
-                                                    st.session_state[f"apollo_debug_{outreach.id}"] = {"source": "AI fallback (Perplexity)"}
-                                                    status.update(label=f"✅ Found {len(normalized)} contacts via AI fallback", state="complete")
-
-                                    elif method == "Apollo (broad)":
-                                        broad_query = "Sales, Business Development, Growth, CEO, Founder"
-                                        contacts, debug_info = find_contacts_for_lead(company.name, broad_query, limit=5)
-                                        st.session_state[f"contacts_{outreach.id}"] = contacts
-                                        st.session_state[f"apollo_debug_{outreach.id}"] = debug_info
-                                        if contacts:
-                                            status.update(label=f"✅ Found {len(contacts)} contacts!", state="complete")
-                                        else:
-                                            status.update(label="❌ No contacts found.", state="error")
-                                            if debug_info.get("error") and "domain resolution failed" in debug_info.get("error").lower():
-                                                status.write("🤖 Apollo failed to resolve org. Falling back to AI research...")
-                                                ai_contacts = find_contacts_via_perplexity(company.name, broad_query)
-                                                normalized = [{
-                                                    "name": c.get("name"),
-                                                    "title": c.get("title"),
-                                                    "email": c.get("email"),
-                                                    "linkedin_url": c.get("linkedin_url"),
-                                                    "source": "perplexity_ai",
-                                                    "reason": c.get("reason"),
-                                                } for c in (ai_contacts or [])]
-                                                if normalized:
-                                                    st.session_state[f"contacts_{outreach.id}"] = normalized
-                                                    st.session_state[f"apollo_debug_{outreach.id}"] = {"source": "AI fallback (Perplexity)"}
-                                                    status.update(label=f"✅ Found {len(normalized)} contacts via AI fallback", state="complete")
-
-                                    elif method == "AI (Perplexity)":
-                                        ai_contacts = find_contacts_via_perplexity(company.name, target_role)
-                                        normalized = [{
-                                            "name": c.get("name"),
-                                            "title": c.get("title"),
-                                            "email": c.get("email"),
-                                            "linkedin_url": c.get("linkedin_url"),
-                                            "source": "perplexity_ai",
-                                            "reason": c.get("reason"),
-                                        } for c in (ai_contacts or [])]
-                                        st.session_state[f"contacts_{outreach.id}"] = normalized
-                                        st.session_state[f"apollo_debug_{outreach.id}"] = {"source": "AI (Perplexity)"}
-                                        if normalized:
-                                            status.update(label=f"✅ Found {len(normalized)} contacts via AI", state="complete")
-                                        else:
-                                            status.update(label="❌ No leaders found via AI.", state="error")
-
-                                    else:  # AI + Apollo enrich
-                                        ai_contacts = find_contacts_via_perplexity(company.name, target_role)
-                                        status.write(f"Found {len(ai_contacts or [])} potential leaders via AI...")
-                                        apollo = ApolloClient()
-                                        final_contacts = []
-                                        dom = None
-                                        try:
-                                            orgs = apollo.search_organizations(company.name)
-                                            if orgs:
-                                                dom = orgs[0].get('primary_domain') or orgs[0].get('domain')
-                                        except Exception:
-                                            dom = None
-
-                                        for c in (ai_contacts or []):
-                                            name = c.get('name')
-                                            if not name:
-                                                continue
-                                            status.write(f"Enriching {name}...")
-                                            matches = apollo.enrich_person_by_name(name, company_domain=dom, company_name=company.name)
-                                            if matches:
-                                                best = matches[0]
-                                                best['reason'] = c.get('reason')
-                                                final_contacts.append(best)
-                                            else:
-                                                final_contacts.append({
-                                                    "name": c.get("name"),
-                                                    "title": c.get("title"),
-                                                    "email": c.get("email"),
-                                                    "linkedin_url": c.get("linkedin_url"),
-                                                    "source": "perplexity_ai",
-                                                    "reason": c.get("reason"),
-                                                })
-
-                                        st.session_state[f"contacts_{outreach.id}"] = final_contacts
-                                        st.session_state[f"apollo_debug_{outreach.id}"] = {"source": "AI + Apollo enrich"}
-                                        if final_contacts:
-                                            status.update(label=f"✅ Found {len(final_contacts)} contacts (some enriched)", state="complete")
-                                        else:
-                                            status.update(label="❌ No leaders found.", state="error")
-
-                                except Exception as e:
-                                    status.update(label="❌ Search failed", state="error")
-                                    st.error(str(e))
+                target_role = st.text_input("Role Keywords", value=default_role, help="Comma-separated titles")
+                
+                c_search1, c_search2, c_search3 = st.columns([1,1,1])
+                with c_search1:
+                    if st.button("Search Apollo", help="Search using specific keywords above", use_container_width=True):
+                        st.session_state.pop(f"contacts_{outreach.id}", None)
+                        with st.status("🔍 Searching Apollo...", expanded=True) as status:
+                            try:
+                                contacts, debug_info = find_contacts_for_lead(company.name, target_role, limit=3)
+                                st.session_state[f"contacts_{outreach.id}"] = contacts
+                                st.session_state[f"apollo_debug_{outreach.id}"] = debug_info
+                                
+                                if contacts:
+                                    status.update(label=f"✅ Found {len(contacts)} contacts!", state="complete")
+                                else:
+                                    identifier = debug_info.get('resolved_domain') or f"OrgID {debug_info.get('resolved_org_id')}"
+                                    status.update(label=f"❌ No contacts at {identifier}", state="error")
+                            except Exception as e:
+                                st.error(f"Error: {e}")
+                
+                with c_search2:
+                    if st.button("Broad Search", help="Search 'Sales/Growth' at this Org ID (ignores custom roles)", use_container_width=True):
+                         # Clear previous results to avoid confusion
+                         st.session_state.pop(f"contacts_{outreach.id}", None)
+                         
+                         with st.status("🔍 Broad Org Search...", expanded=True) as status:
+                            try:
+                                # Use generic titles
+                                broad_query = "Sales, Business Development, Growth, CEO, Founder"
+                                contacts, debug_info = find_contacts_for_lead(company.name, broad_query, limit=5)
+                                st.session_state[f"contacts_{outreach.id}"] = contacts
+                                st.session_state[f"apollo_debug_{outreach.id}"] = debug_info
+                                
+                                if contacts:
+                                    status.update(label=f"✅ Found {len(contacts)} contacts!", state="complete")
+                                else:
+                                    status.update(label="❌ No contacts found.", state="error")
+                            except Exception as e:
+                                st.error(str(e))
+                
+                with c_search3:
+                    # FIX: Disable AI Research if we already have an assigned contact
+                    ai_disabled = (outreach.contact_id is not None)
+                    if st.button("AI Research", help="Ask Perplexity for Names + Strategy" + (" (Disabled: Contact Assigned)" if ai_disabled else ""), use_container_width=True, disabled=ai_disabled):
+                         if ai_disabled:
+                             st.warning("Contact already assigned. Unassign or manually edit to research others.")
+                         else:
+                             st.session_state.pop(f"contacts_{outreach.id}", None)
+                             with st.status("🤖 AI Researching...", expanded=True) as status:
+                                 try:
+                                     # 1. Get Names from AI
+                                     ai_contacts = find_contacts_via_perplexity(company.name, target_role)
+                                     status.write(f"Found {len(ai_contacts)} potential leaders via AI...")
+                                     
+                                     # 2. Enrich via Apollo (if possible)
+                                     apollo = ApolloClient()
+                                     final_contacts = []
+                                     
+                                     # Try to resolve domain once for efficiency
+                                     dom = None
+                                     try:
+                                         orgs = apollo.search_organizations(company.name)
+                                         if orgs:
+                                             dom = orgs[0].get('primary_domain') or orgs[0].get('domain')
+                                     except:
+                                         pass
+                                     
+                                     for c in ai_contacts:
+                                         name = c['name']
+                                         if not name: continue
+                                         
+                                         status.write(f"Enriching {name}...")
+                                         matches = apollo.enrich_person_by_name(name, company_domain=dom, company_name=company.name)
+                                         
+                                         if matches:
+                                             # Use the Apollo match (it has email!)
+                                             best = matches[0]
+                                             # Keep the reason/notes from AI if useful
+                                             best['reason'] = c.get('reason')
+                                             final_contacts.append(best)
+                                         else:
+                                             # Fallback to AI-only
+                                             final_contacts.append(c)
+                                     
+                                     st.session_state[f"contacts_{outreach.id}"] = final_contacts
+                                     st.session_state[f"apollo_debug_{outreach.id}"] = {"source": "Perplexity + Apollo Enrich"}
+                                     
+                                     if final_contacts:
+                                         status.update(label=f"✅ Found {len(final_contacts)} leaders ({len([x for x in final_contacts if x.get('email')])} emails)!", state="complete")
+                                     else:
+                                         status.update(label="❌ No leaders found via AI.", state="error")
+                                 except Exception as e:
+                                     st.error(str(e))
 
                 # --- ✍️ Manual Entry Fallback ---
                 with st.expander("✍️ Manual Entry (LinkedIn/SalesNav)", expanded=False):
@@ -1480,7 +1244,7 @@ def main():
                              else:
                                  cols[1].write("Timestamps: None")
                         
-                        cols[1].write(f"Recency (multiplier): {bd.get('recency_multiplier', '—')}")
+                        cols[1].write(f"Recency Score: {bd['recency_score']}")
                             
                         cols[1].write(f"Signal: {bd['signal_score']}")
                         cols[1].write(f"Role Adj: {bd['role_adjustment']}")
@@ -1588,20 +1352,8 @@ def main():
                 is_safe_subj, reasons_subj = validate_send_safe(current_subject)
                 is_safe = is_safe_body and is_safe_subj
                 
-                # --- AI Content Detection ---
-                ai_markers_total = []
-                if config.ENABLE_AI_CONTENT_DETECTION:
-                    ai_markers_body = detect_ai_content_markers(current_body)
-                    ai_markers_subj = detect_ai_content_markers(current_subject)
-                    ai_markers_total = ai_markers_body + ai_markers_subj
-                
                 if is_safe:
-                    if config.ENABLE_AI_CONTENT_DETECTION and ai_markers_total:
-                        st.caption(f"⚠️ Send-safe but contains AI markers: {', '.join(ai_markers_total)} (Subject: '{current_subject[:40]}...')")
-                    elif config.ENABLE_AI_CONTENT_DETECTION:
-                        st.caption(f"✅ Send-safe & human-like (Subject: '{current_subject[:40]}...')")
-                    else:
-                        st.caption(f"✅ Send-safe (Subject: '{current_subject[:40]}...')")
+                    st.caption(f"✅ Send-safe (Subject: '{current_subject[:40]}...')")
                 else:
                     all_reasons = []
                     if not is_safe_body: all_reasons.append(f"Body: {reasons_body}")
@@ -1742,8 +1494,11 @@ def main():
                                         status.update(label="✅ Sent successfully!", state="complete")
                                         st.success(f"Email sent to {final_target_email}!")
                                         
-                                        # Clear active selection so sent items drop off when Hide Sent is enabled
-                                        st.session_state["active_outreach_id"] = None
+                                        # --- LOCK SELECTION (Fix Context Switching) ---
+                                        # Pin the current outreach ID so the UI doesn't jump to the next item in the group
+                                        # This prevents the "Stephen sent -> Seth appears" confusion
+                                        st.session_state["active_outreach_id"] = outreach.id
+                                        # -----------------------------------------------
                                         
                                         time.sleep(1)
                                         st.rerun()
@@ -1826,37 +1581,6 @@ def main():
         else:
             with col_editor: st.info("🎉 Inbox is empty!")
 
-    with tab_shortlist:
-        st.header("📋 My Shortlist")
-        st.caption("Jobs scored/shortlisted for the tenant selected in the sidebar. Run «Sync jobs to tenants» after scrape+score if empty.")
-        if not current_tenant_id:
-            st.info("Select a tenant in the sidebar. Run `python migrate_multitenant.py` if none exist.")
-        else:
-            rows = (
-                session.query(JobTenant, Job)
-                .join(Job, Job.id == JobTenant.job_id)
-                .filter(JobTenant.tenant_id == current_tenant_id)
-                .filter(JobTenant.status.in_(["shortlisted", "scored"]))
-                .order_by(JobTenant.overall_score.desc(), JobTenant.updated_at.desc())
-                .all()
-            )
-            if not rows:
-                st.info("No shortlisted/scored jobs yet. Run the scraper, then «Sync jobs to tenants».")
-            else:
-                for jt, j in rows:
-                    score = jt.overall_score or 0
-                    badge = "🟢" if score >= 80 else "🟡" if score >= 60 else "⚪"
-                    with st.container():
-                        c1, c2 = st.columns([3, 1])
-                        with c1:
-                            st.markdown(f"**{j.title}** at **{j.company_name or 'Unknown'}**")
-                            st.caption(f"{j.location or '—'} · {j.source or '—'}")
-                        with c2:
-                            st.markdown(f"{badge} **{score}**")
-                        if j.url:
-                            st.markdown(f"[Apply / View posting]({j.url})")
-                        st.divider()
-
     with tab_test:
         st.header("Validation Audit")
         runs = [r[0] for r in session.query(ProactiveOutreach.test_run_id).filter(ProactiveOutreach.test_run_id != None).distinct().all()]
@@ -1867,3 +1591,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+```

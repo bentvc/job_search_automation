@@ -5,6 +5,44 @@ from typing import List, Dict, Any
 
 logger = logging.getLogger(__name__)
 
+def _org_search_variants(company_name: str) -> List[str]:
+    """
+    Generate a small set of fallback org-name queries.
+    Apollo often stores brands as shorter names (e.g. 'Heidi' vs 'Heidi Health').
+    """
+    if not company_name:
+        return []
+    raw = company_name.strip()
+    if not raw:
+        return []
+
+    variants: List[str] = []
+    def _add(v: str):
+        v = (v or "").strip()
+        if v and v not in variants:
+            variants.append(v)
+
+    _add(raw)
+
+    # Remove common suffix tokens
+    import re
+    cleaned = re.sub(r"\b(inc|inc\.|llc|ltd|corp|co|company|health|healthcare|group|systems)\b", "", raw, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
+    _add(cleaned)
+
+    # If multi-word, try first 1-2 tokens (brand shorthand)
+    parts = [p for p in re.split(r"\s+", raw) if p]
+    if len(parts) >= 2:
+        _add(parts[0])
+        _add(" ".join(parts[:2]))
+
+    # If we removed suffixes into one token, try that token
+    parts2 = [p for p in re.split(r"\s+", cleaned) if p]
+    if len(parts2) == 1:
+        _add(parts2[0])
+
+    return variants[:5]
+
 def _log_payload(payload: dict, max_len: int = 800) -> str:
     try:
         s = json.dumps(payload, default=str)
@@ -46,34 +84,91 @@ class ApolloClient:
             return []
 
         endpoint = f"{self.BASE_URL}/mixed_companies/search"
-        payload = {
-            "q_organization_name": company_name,
-            "page": 1,
-            "per_page": 3
-        }
+        attempts = _org_search_variants(company_name)
+        if not attempts:
+            return []
 
-        try:
-            logger.info(f"[Apollo] POST {endpoint} payload={_log_payload(payload)}")
-            logger.info(f"Sending Apollo request with Key: {self.api_key[:4]}...{self.api_key[-4:] if self.api_key else 'None'}")
-            response = requests.post(endpoint, json=payload, headers=self.headers, timeout=15)
-            
-            logger.info(f"[Apollo] status={response.status_code}")
-            
-            if response.status_code == 200:
+        # Collect candidates across variants, then choose best match.
+        # This avoids returning irrelevant hits like "Heidi Health Foundation"
+        # when the real brand is stored as a shorter name (e.g. "Heidi").
+        candidates_by_id: Dict[str, Dict[str, Any]] = {}
+        try_queries: List[str] = []
+
+        # Normalizers for scoring
+        import re
+        def _norm(s: str) -> str:
+            s = (s or "").lower().strip()
+            s = re.sub(r"\b(inc|inc\.|llc|ltd|corp|co|company|health|healthcare|group|systems|foundation)\b", "", s)
+            s = re.sub(r"[^a-z0-9]+", "", s)
+            return s
+
+        target_norm = _norm(company_name)
+        primary_token = (company_name or "").strip().split(" ")[0] if company_name else ""
+        primary_norm = _norm(primary_token)
+
+        for q in attempts:
+            payload = {"q_organization_name": q, "page": 1, "per_page": 10}
+            try:
+                try_queries.append(q)
+                logger.info(f"[Apollo] POST {endpoint} payload={_log_payload(payload)}")
+                logger.info(f"Sending Apollo request with Key: {self.api_key[:4]}...{self.api_key[-4:] if self.api_key else 'None'}")
+                response = requests.post(endpoint, json=payload, headers=self.headers, timeout=15)
+                logger.info(f"[Apollo] status={response.status_code}")
+
+                if response.status_code != 200:
+                    logger.error(f"Apollo org search failed: {response.status_code} - {response.text}")
+                    continue
+
                 data = response.json()
                 logger.info(f"[Apollo] Reponse keys: {_log_response_keys(data)}")
-                # Smoke test confirms 'organizations' and 'accounts' both appear.
-                # Prioritize organizations, fallback to accounts.
                 orgs = data.get("organizations") or data.get("accounts") or []
-                if not orgs:
-                     logger.warning(f"Response dump: {str(data)[:200]}")
-                return orgs
-            else:
-                logger.error(f"Apollo org search failed: {response.status_code} - {response.text}")
-                return []
-        except Exception as e:
-            logger.error(f"Apollo org search error: {e}")
-        return []
+                for o in (orgs or []):
+                    oid = o.get("id")
+                    if oid and oid not in candidates_by_id:
+                        candidates_by_id[oid] = o
+
+            except Exception as e:
+                logger.error(f"Apollo org search error (q='{q}'): {e}")
+                continue
+
+        candidates = list(candidates_by_id.values())
+        if not candidates:
+            return []
+
+        def _score_org(o: Dict[str, Any]) -> int:
+            name = o.get("name") or ""
+            n = _norm(name)
+            domain = (o.get("primary_domain") or o.get("domain") or o.get("website_url") or "").lower()
+
+            score = 0
+            if domain:
+                score += 40
+            if n == target_norm:
+                score += 80
+            if primary_norm and n == primary_norm:
+                score += 60
+            if target_norm and target_norm in n:
+                score += 25
+            if primary_norm and primary_norm in n:
+                score += 20
+            if primary_norm and domain and primary_norm in domain:
+                score += 35
+
+            # Penalize common false positives
+            lname = name.lower()
+            if "foundation" in lname:
+                score -= 200
+            if "counselor" in lname or "mental health" in lname:
+                score -= 150
+
+            return score
+
+        candidates.sort(key=_score_org, reverse=True)
+        best = candidates[0]
+        if best and best.get("name"):
+            logger.info(f"[Apollo] Org selected '{best.get('name')}' from queries={try_queries}")
+
+        return candidates[:3]
 
     def search_people(self, company_domain: str = None, titles: List[str] = None, organization_ids: List[str] = None) -> List[Dict[str, Any]]:
         """
@@ -84,6 +179,10 @@ class ApolloClient:
 
         endpoint = f"{self.BASE_URL}/mixed_people/api_search"
         
+        # IMPORTANT: callers pass titles=None to indicate a broad search.
+        # We still provide default titles for relevance, but we must NOT
+        # apply "verified only" gating in that case.
+        titles_were_provided = titles is not None
         if not titles:
             titles = config.APOLLO_TARGET_TITLES
 
@@ -91,7 +190,8 @@ class ApolloClient:
             "person_titles": titles,
             "page": 1,
             "per_page": 50, # Boosted for local filtering
-            "contact_email_status": ["verified"] if titles else [] # Only strict if titles provided
+            # Only strict if titles were explicitly provided by caller
+            "contact_email_status": ["verified"] if titles_were_provided else []
         }
         
         if organization_ids:

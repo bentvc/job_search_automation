@@ -15,6 +15,7 @@ import requests
 import time
 from typing import Dict, Any, Optional
 from dotenv import load_dotenv
+from utils.email_safety import strip_unresolved_placeholders, sanitize_email_text
 
 load_dotenv()
 
@@ -83,6 +84,10 @@ def deepseek_analyze_and_draft(
     """
     Stage 1: DeepSeek analyzes the opportunity and produces strategic wedge + proof points.
     """
+    # Strip unresolved placeholders before generation
+    job_description = strip_unresolved_placeholders(job_description or "")
+    sender_profile = strip_unresolved_placeholders(sender_profile or "")
+
     # Truncate job description to avoid token limits
     job_desc_truncated = job_description[:4000] if job_description else "No description provided"
     
@@ -168,7 +173,20 @@ Email: bent@freeboard-advisory.com
 LinkedIn: https://www.linkedin.com/in/bent-christiansen/
 """
 
-PERPLEXITY_SYSTEM_PROMPT = """
+GOLD_OUTREACH_EXAMPLE = """
+GOLD EXAMPLE (style and structure only; do not copy facts unless provided):
+Subject: Thoughts on scaling US sales post your Series B
+
+Hi,
+
+Congrats on the $65M Series B in October. Having followed Heidi's growth from Australia to powering 10M+ consults monthly, my read is that the US expansion hinges on translating a strong enterprise sales motion from a relatively unified system like the NHS into a market where care delivery models, clinical workflows, and contracting structures vary widely across providers and payers. Am I reading that right?
+
+In similar US expansions I've worked on, the friction showed up in mapping a single product narrative across very different clinical environments and risk-based contracts without fragmenting the sales motion or over-customizing. I've led teams closing 7-figure Medicaid and Medicare Advantage deals where that translation work often determined whether pilots turned into durable, multi-year revenue.
+
+If that's the problem space you're navigating, I'm happy to share what proved durable in those ramps.
+"""
+
+PERPLEXITY_SYSTEM_PROMPT = f"""
 You are an expert enterprise sales leader writing high-stakes outbound emails to C-suite leaders in healthtech.
 
 TASK:
@@ -178,13 +196,42 @@ TASK:
 4) Tone: Senior, professional, non-salesy, and high-value. Focus on how the sender's specific experience solves a problem relevant to the wedge.
 5) IMPORTANT: Write the email body only. Do not add any name, signature, or contact info; the system will append a fixed signature.
 
+CONSULTATIVE TONE (CRITICAL):
+You are a SENIOR PEER offering perspective, NOT a consultant prescribing solutions.
+- Use QUESTIONS not assertions about their strategy: "Am I reading this right?" "Does that resonate?" "Is that the challenge?"
+- Frame observations tentatively: "The way I'm reading this..." "My sense is..." "It seems like..."
+- AVOID authoritative prescriptions: Don't say "will be key to" or "must focus on" or "needs to prioritize"
+- INVITE DIALOGUE: End strategic observations with questions that invite response
+- Show expertise through insightful questions, not by lecturing them about their business
+- Example transformation:
+  ❌ BAD: "Bridging enterprise sales cycles will be key to sustaining momentum"
+  ✅ GOOD: "My sense is that creating a repeatable enterprise sales motion across diverse systems will be key. Am I reading this right?"
+
+ROLE DISCIPLINE:
+- Write as someone who might be wrong about the details, but is accountable for the consequences.
+- Avoid startup or VC metaphors and abstraction phrases. Use plain operational language.
+- Do NOT reference job postings, role descriptions, or hiring language.
+- Include at most ONE strategic question in the body. If a second question appears, merge or remove it.
+- Place the single strategic question in the first third of the email, not at the end.
+- Do NOT use contrastive constructions ("not X but Y", "less/more", "wasn't X - it was Y"). State the key constraint directly without negating an alternative.
+
+{GOLD_OUTREACH_EXAMPLE}
+
+WRITING MECHANICS:
+- Use ONLY standard punctuation: periods, commas, regular hyphens (-), question marks, exclamation points
+- NEVER use em dashes (—) or en dashes (–) - these are AI content giveaways
+- Avoid overly formal openings like "I trust this finds you well"
+- Write naturally as a human would, not as an AI assistant
+- Use contractions where natural (I've, we've, that's)
+- Keep sentences varied in length and structure
+
 Return ONLY valid JSON with:
-{
+{{
   "final_email": "string",
   "confidence": 0.0-1.0,
   "factual_flags": ["list of any unverified claims"],
   "citations": ["list of key URLs used"]
-}
+}}
 """
 
 def perplexity_finalize(
@@ -215,6 +262,9 @@ def perplexity_finalize(
             "citations": []
         }
     
+    job_description = strip_unresolved_placeholders(job_description or "")
+    sender_profile = strip_unresolved_placeholders(sender_profile or "")
+    ds_rationale = strip_unresolved_placeholders(ds_rationale or "")
     job_desc_truncated = job_description[:3000] if job_description else "No description"
     proof_points_text = "\n- ".join(ds_proof_points) if ds_proof_points else "None"
     
@@ -263,7 +313,7 @@ TASK:
                     {"role": "user", "content": user_prompt}
                 ],
                 "max_tokens": 1500,
-                "temperature": 0.3
+                "temperature": 0.25
             }
             
             headers = {
@@ -312,6 +362,8 @@ TASK:
             # Append Signature (forcing it)
             if parsed.get("final_email"):
                 body = parsed["final_email"].rstrip()
+                body = strip_unresolved_placeholders(body)
+                body = sanitize_email_text(body)
                 
                 # Aggressively strip common placeholders
                 placeholders = ["[Your Name]", "[Sender Name]", "[My Name]", "Best regards,", "Best,", "Sincerely,"]

@@ -76,6 +76,30 @@ class Job(Base):
     
     company = relationship("Company", back_populates="jobs")
     scores = relationship("JobScore", back_populates="job")
+    job_tenants = relationship("JobTenant", back_populates="job")
+
+class Tenant(Base):
+    """Multi-tenant: each user (e.g. you, a friend) has isolated job shortlist / profile."""
+    __tablename__ = 'tenants'
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    name = Column(String(255), unique=True)
+    slug = Column(String(100), unique=True)
+    profile_summary = Column(Text, nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
+    job_tenants = relationship("JobTenant", back_populates="tenant")
+
+class JobTenant(Base):
+    """Per-tenant job score and status. Same job can be shortlisted for one tenant, rejected for another."""
+    __tablename__ = 'job_tenant'
+    job_id = Column(String(36), ForeignKey('jobs.id'), primary_key=True)
+    tenant_id = Column(String(36), ForeignKey('tenants.id'), primary_key=True)
+    status = Column(String(50), default='new')  # new, scored, shortlisted, rejected, applied, archived
+    overall_score = Column(Integer, nullable=True)
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    job = relationship("Job", back_populates="job_tenants")
+    tenant = relationship("Tenant", back_populates="job_tenants")
 
 class JobScore(Base):
     __tablename__ = 'job_scores'
